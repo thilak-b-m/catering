@@ -1,0 +1,744 @@
+/* login page 1 */
+
+.loginpage .fa-utensils{
+    color:#9c1212;
+    gap: 10px;
+    font-size: 30px;
+}
+.loginpage h4{
+    color:#9c1212;
+    display: inline;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-left: 5px;
+    font-size: 30px; 
+}
+.loginpage #line1{
+    color:#9c1212;
+    width: 100%;
+}
+.loginpage h1{
+    font-size: 50px;
+    font-weight: 900;
+    color:#880e21;
+    text-align: center;
+}
+.loginpage p{
+    font-size: 20px;
+    text-align: center;
+    color: rgb(106, 103, 103);
+    line-height: 0%;
+}
+
+
+.loginpage .container{
+    display: flex;
+    gap: 50px;
+    margin-top: 50px;
+    justify-content: center;
+}
+
+
+.loginpage .user {
+    max-width: 350px;
+    height: 250px;
+    background: rgb(255, 255, 255);
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 70px;
+    border: 2px solid #5e0c0c;
+    border-radius: 15px;
+    padding: 20px;
+    
+}
+.loginpage .user .fa-regular{
+    color:#9c1212;
+    font-size: 40px;
+    margin-top: 25px;
+    margin-bottom: 20px;
+    border: 2px solid #b04343;
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    padding: 15px;
+    border-radius: 50%;
+}
+.loginpage .user h4{
+    color: #880e21;
+}
+.loginpage .user p1{
+    color:#880e21;
+}
+.loginpage .user #b1{
+    background-color: #880e21;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 15px;
+    min-width: 320px;
+    height: 45px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.loginpage .caterer{
+    max-width: 350px;
+    height: 250px;
+    background: rgb(255, 255, 255);
+    text-align: center;
+    margin-top: 20px;
+    border: 2px solid #5e0c0c;
+    border-radius: 15px;
+    padding: 20px;
+    
+}
+.loginpage .caterer .fa-bread-slice{
+    color:#880e21;
+    font-size: 40px;
+    margin-top: 25px;
+    margin-bottom: 20px;
+    border: 2px solid #b04343;
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    padding: 15px;
+    border-radius: 50%;
+}
+.loginpage .caterer h4{
+    color: #880e21;
+}
+.loginpage .caterer p1{
+    color:#880e21;
+}
+.loginpage .caterer #b2{
+    background-color: #880e21;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 15px;
+    min-width: 320px;
+    height: 45px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.loginpage .container1{
+    display: flex;
+    gap: 50px;
+    margin-top: 20px;
+    margin-bottom: 80px;
+    justify-content: center;
+}
+.loginpage .menu{
+    max-width: 300px;
+    text-align: center;
+    float: left;
+    
+}
+
+.loginpage .menu .fa-utensils{
+    color:#880e21;
+    font-size: 35px;
+    border: 2px solid #b04343;
+    width: 30px;
+    height: 30px;
+    padding: 15px;
+    border-radius: 50%;
+}
+
+.loginpage .menu .fa-address-book{
+    color:#880e21;
+    font-size: 35px;
+    border: 2px solid #b04343;
+    width: 30px;
+    height: 30px;
+    padding: 15px;
+    border-radius: 50%;
+}
+
+.loginpage .menu .fa-bread-slice{
+    color:#880e21;
+    font-size: 35px;
+    border: 2px solid #b04343;
+    width: 30px;
+    height: 30px;
+    padding: 15px;
+    border-radius: 50%;
+}
+
+.loginpage .menu h5{
+    color:#880e21;
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-top: 20px;;
+}
+
+.loginpage .menu p1{
+    color:rgb(52, 48, 48);
+    margin-bottom: 20px;
+}
+
+/* end of login page 1 */
+
+/*user login */
+
+.ulogin{
+    display: flex;
+    justify-content: center;
+    margin-top: 120px;
+}
+.ulogin .userlogin{
+    text-align: center;
+    height: 450px;
+    width: 400px;
+    padding: 2%;
+    border: 2px solid #880e21;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+.ulogin .userlogin .fa-utensils{
+    color: #880e21;
+    font-size: 27px;
+    margin-right: 5px;
+    margin-top: 20px;;
+}
+
+.ulogin #tastybite{
+    color: #880e21;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline;
+}
+
+.ulogin h4{
+    color:#6d0b1a;
+    font-size: 23px;
+    margin-top: 40px;
+    margin-bottom: 5px;
+}
+.ulogin p1{
+    color:#4e4848;
+    font-size: 14px;
+}
+.ulogin #email, #password{
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.ulogin #mail, #pass{
+    font-size: 12px;
+    color: #793030;
+    float: left;
+    margin-left: 27px;
+}
+
+.ulogin #signin{
+    background-color: #880e21;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    width: 90%;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ulogin p2{
+    font-size: 14px;
+    color: #4e4848;
+    margin-bottom: 10px;
+}
+.ulogin #create_acc{
+    font-size: 14px;
+    color: #880e21;
+    text-decoration: underline;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+/* end of user login */
+
+/* caterer login */
+
+.clogin{
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+.clogin .userlogin{
+    text-align: center;
+    height: 420px;
+    width: 380px;
+    padding: 2%;
+    border: 2px solid #880e21;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+.clogin .userlogin .fa-utensils{
+    color: #880e21;
+    font-size: 27px;
+    margin-right: 5px;
+    margin-top: 20px;
+}
+
+.clogin #tastybite{
+    color: #880e21;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline;
+}
+
+.clogin h4{
+    color:#6d0b1a;
+    font-size: 23px;
+    margin-top: 40px;
+    margin-bottom: 5px;
+}
+.clogin p1{
+    color:#4e4848;
+    font-size: 14px;
+}
+.clogin #email, #password{
+    width: 85%;
+    padding: 10px;
+    margin-bottom: 0px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.clogin #mail, #pass{
+    font-size: 12px;
+    color: #793030;
+    float: left;
+    margin-left: 27px;
+}
+
+.clogin #signin{
+    background-color: #880e21;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 20px;
+    width: 85%;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.clogin p2{
+    font-size: 14px;
+    color: #4e4848;
+}
+.clogin #create_acc{
+    font-size: 14px;
+    color: #880e21;
+    text-decoration: underline;
+    margin-left: 5px;
+}
+
+/* end of caterer login */
+
+/* create */
+
+.create{
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+.create .c1{
+    text-align: center;
+    height: 270px;
+    width: 400px;
+    padding: 5%;
+    padding-top: 50px;
+    border: 2px solid #880e21;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+.c1 .fa-utensils{
+    color: #880e21;
+    font-size: 27px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+}
+
+.c1 #tastybite{
+    color: #880e21;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline;
+    margin-bottom: 20px;
+}
+
+.c1 #email, #password{
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.c1 #mail, #pass{
+    font-size: 12px;
+    color: #793030;
+    float: left;
+    margin-left: 27px;
+}
+
+.c1 #login{
+    background-color: #880e21;
+    color: white;
+    border: none;
+    padding: 10px;
+    text-align: center;
+    display: inline-block;
+    font-size: 20px;
+    text-decoration: none;
+    margin-top: 10px;
+    width: 85%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/* end of create */
+
+/* user detail */
+
+.u_detail{
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+
+.u_detail .d1{
+    text-align: center;
+    height: 350px;
+    width: 400px;
+    padding: 10px;
+    padding-top: 30px;
+    border: 2px solid #880e21;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+.d1 .fa-utensils{
+    color: #880e21;
+    font-size: 27px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+}
+
+.d1 #tastybite{
+    color: #880e21;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: auto;
+    display: inline;
+}
+
+.d1 #name, #password, #phone, #address{
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+
+.d1 #sub {
+    background-color: #880e21;
+    color: white;
+    border: none;
+    padding: 13px;
+    text-align: center;
+    display: inline-block;
+    font-size: 18px;
+    margin-top: 20px;
+    width: 330px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* end of user detail */
+
+/* caterer detail */
+
+.c_detail {
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+
+.c_detail .d2 {
+    text-align: center;
+    height: 400px;
+    width: 400px;
+    padding: 10px;
+    padding-top: 30px;
+    border: 2px solid #880e21;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+}
+
+.d2 .fa-utensils {
+    color: #880e21;
+    font-size: 27px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+}
+
+.d2 #tastybite {
+    color: #880e21;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: auto;
+    display: inline;
+}
+
+.d2 #name, #phone, #address, #fssai {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+.d2 #sub {
+    background-color: #880e21;
+    color: white;
+    border: none;
+    padding: 13px;
+    text-align: center;
+    display: inline-block;
+    font-size: 18px;
+    margin-top: 20px;
+    width: 330px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* end of caterer detail */
+
+/* user dashboard */
+
+
+.userdashboard{
+    width: 20%;
+    border-right: 1px solid gray;
+    float: left;
+    position: fixed;             
+    top: 0;
+    bottom: 0;
+}
+
+.userdashboard .fa-utensils{
+    color:#880e21;
+    font-size: 25px;
+    margin-top: 15px;
+
+}
+
+.userdashboard h4{
+    color: #880e21;
+    font-size: 28px;
+    margin-top: 10px;
+    display: inline;
+    margin-left: 5px;
+}
+
+.search_caterer #b{
+    height: 50px;
+    width: 90%;
+    color: #ffffff;
+    background-color: #880e21;
+    border: 1px solid black;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 7px;
+    margin-left: 5px;
+    border-radius: 7px;
+    text-align: left;
+}
+
+.userdashboard .search_caterer .fa-house{
+    font-size: 18px;
+    color: #ffffff;
+    float: left;
+    margin-left: 10px;
+    margin-top: auto;
+    margin-right: 20px;
+}
+
+.userdashboard #b1{
+    height: 50px;
+    width: 90%;
+    color: #880e21;
+    background-color: #e6e0e0;
+    font-size: 15px;
+    text-align: left;
+    margin-top: 10px;
+    border-radius: 7px;
+    margin-left: 5px;
+    border: none;
+}
+.userdashboard .fa-bread-slice, .userdashboard .fa-user, .userdashboard .fa-arrow-right-from-bracket{
+    font-size: 18px;
+    color: #880e21;
+    float: left;
+    margin-left: 10px;
+    margin-top: auto;
+    margin-right: 20px;
+}
+
+.welcome{
+    text-align: left;
+    margin-top: 20px;
+    margin-left: 22%;
+}
+
+.welcome h2{
+    color: #880e21;
+    font-size: 40px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.welcome p1{
+    font-size: 18px;
+    color: #4e4848;
+    margin-bottom: 20px;
+}
+
+.welcome .search{
+    min-height: 160px;
+    width: 90%;
+    margin-top: 40px;
+    border: 1px solid #4e4848;
+    border-radius: 7px;
+    background-color:#f3eded;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.welcome .search h4{
+    color: #880e21;
+    margin-top: 20px;
+    font-size: 25px;
+    margin-bottom: 0px;
+}
+.welcome .search p2{
+    color: #4e4848;
+    font-size: 15px;
+    margin-top: 5px;
+}
+.welcome .search #searchbox{
+    height: 35px;
+    width: 80%;
+    border: 0.5px solid gray;
+    background-color: #ffffff;
+    border-radius: 5px;
+    color: #7c7575;
+    margin-top: 20px;
+}
+.welcome .search #search{
+    height: 35px;
+    width: 70px;
+    background-color: #880e21;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 16px;
+    text-align: center;
+    margin-left: 20px;
+}
+
+/* end of user dashboard */
+
+/* my booking */
+
+.mybookings{
+    text-align: left;
+    margin-top: 20px;
+    margin-left: 22%;
+}
+.mybookings h2{
+    color: #880e21;
+    font-size: 40px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.mybookings p1{
+    font-size: 18px;
+    color: #4e4848;
+    margin-bottom: 20px;
+}
+
+.mybook .fa-bread-slice{
+    font-size: 18px;
+    color: #ffffff;
+    float: left;
+    margin-left: 10px;
+    margin-top: auto;
+    margin-right: 20px;
+}
+
+.mybook #b{
+    height: 50px;
+    width: 90%;
+    color: #ffffff;
+    background-color: #880e21;
+    border: 1px solid black;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 7px;
+    margin-left: 5px;
+    border-radius: 7px;
+    text-align: left;
+}
+.userdashboard .fa-house{
+    font-size: 18px;
+    color: #880e21;
+    float: left;
+    margin-left: 10px;
+    margin-top: auto;
+    margin-right: 20px;
+}
+
+/* end of my bookings */
