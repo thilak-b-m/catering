@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caterer Details | TastyBite</title>
+    <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="c_detail">
+        <div class="d2">
+            <i class="fa-solid fa-utensils"></i>
+            <h4 id="tastybite">TastyBite</h4><br><br>
+
+            <!-- Added ID to form -->
+            <form id="catererForm">
+                <input type="text" id="name" name="name" placeholder="Caterer Name" required><br>
+                <input type="text" id="phone" name="phone" placeholder="Contact Number" required><br>
+                <input type="text" id="address" name="address" placeholder="Business Address" required><br>
+                <input type="text" id="fssai" name="fssai" placeholder="FSSAI Permit ID" required><br>
+                <button type="submit" id="sub">Register Caterer</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("catererForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Get all values
+            const catererData = {
+                name: document.getElementById("name").value,
+                phone: document.getElementById("phone").value,
+                address: document.getElementById("address").value,
+                fssai: document.getElementById("fssai").value
+            };
+
+            // Save to localStorage as JSON
+            localStorage.setItem("catererData", JSON.stringify(catererData));
+
+            // Redirect to user dashboard
+            window.location.href = "user_dashboard.html";
+        });
+    </script>
+</body>
+</html>
