@@ -23,23 +23,28 @@
     </div>
 
     <script>
-        document.getElementById("catererForm").addEventListener("submit", function (e) {
-            e.preventDefault();
+    document.getElementById("catererForm").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-            // Get all values
-            const catererData = {
-                name: document.getElementById("name").value,
-                phone: document.getElementById("phone").value,
-                address: document.getElementById("address").value,
-                fssai: document.getElementById("fssai").value
-            };
+    const catererData = {
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        address: document.getElementById("address").value,
+        fssai: document.getElementById("fssai").value
+    };
 
-            // Save to localStorage as JSON
-            localStorage.setItem("catererData", JSON.stringify(catererData));
+    // Get existing list or create empty one
+    let catererList = JSON.parse(localStorage.getItem("catererList")) || [];
 
-            // Redirect to user dashboard
-            window.location.href = "user_dashboard.html";
-        });
+    // Add new caterer to array
+    catererList.push(catererData);
+
+    // Save back to localStorage
+    localStorage.setItem("catererList", JSON.stringify(catererList));
+
+    window.location.href = "user_dashboard.html";
+    });
     </script>
+
 </body>
 </html>

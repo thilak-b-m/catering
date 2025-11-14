@@ -30,50 +30,50 @@
     </div>
 
     <script>
-        // --- Step 1: Retrieve caterer data from localStorage ---
-        const savedData = localStorage.getItem("catererData");
-        const caterer = savedData ? JSON.parse(savedData) : null;
+const catererList = JSON.parse(localStorage.getItem("catererList")) || [];
 
-        // --- Step 2: Array of available images ---
-        const images = [
-            "../static/images/cater1.jpg",
-            "../static/images/cater2.avif",
-            "../static/images/cater3.jpg",
-            "../static/images/cater4.jpg",
-            "../static/images/cater5.jpg"
-        ];
+const images = [
+    "../static/images/cater1.jpg",
+    "../static/images/cater2.avif",
+    "../static/images/cater3.jpg",
+    "../static/images/cater4.jpg",
+    "../static/images/cater5.jpg"
+];
 
-        // --- Step 3: Display dynamically ---
-        if (caterer) {
-            const container = document.getElementById("catererContainer");
-            const card = document.createElement("div");
-            card.classList.add("caterer-card");
+const container = document.getElementById("catererContainer");
 
-            const img = document.createElement("img");
-            img.src = images[Math.floor(Math.random() * images.length)];
-            img.alt = caterer.name;
-            img.classList.add("caterer-image");
+// Loop through all caterers
+catererList.forEach(caterer => {
+    const card = document.createElement("div");
+    card.classList.add("caterer-card");
 
-            const name = document.createElement("h3");
-            name.textContent = caterer.name;
+    const img = document.createElement("img");
+    img.src = images[Math.floor(Math.random() * images.length)];
+    img.alt = caterer.name;
+    img.classList.add("caterer-image");
 
-            const info = document.createElement("p");
-            info.innerHTML = `
-                📞 ${caterer.phone}<br>
-                📍 ${caterer.address}<br>
-                🧾 FSSAI: ${caterer.fssai}
-            `;
+    const name = document.createElement("h3");
+    name.textContent = caterer.name;
 
-            const btn = document.createElement("button");
-            btn.textContent = "View Details";
-            btn.classList.add("view-btn");
-            btn.addEventListener("click", () => {
-                alert(`Viewing details for ${caterer.name}`);
-            });
+    const info = document.createElement("p");
+    info.innerHTML = `
+        📞 ${caterer.phone}<br>
+        📍 ${caterer.address}<br>
+    `;
 
-            card.append(img, name, info, btn);
-            container.appendChild(card);
-        }
+    const btn = document.createElement("button");
+    btn.textContent = "View Details";
+    btn.classList.add("view-btn");
+    btn.addEventListener("click", () => {
+    const index = catererList.indexOf(caterer); // get caterer index
+    window.location.href = `details.html?id=${index}`;
+});
+
+
+    card.append(img, name, info, btn);
+    container.appendChild(card);
+});
     </script>
+
 </body>
 </html>

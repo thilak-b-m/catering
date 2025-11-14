@@ -1,21 +1,84 @@
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/available.css">
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
-    </head> 
-    <body>
-    <div class="catererdashboard">
-        <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
-        <hr id="line1">
-        <a href="caterer_dashboard.html"><button id="b1"> <i class="fa-solid fa-table-cells-large"></i> Overview</button></a><br>
-        <a href="menu.html"><button id="b1"> <i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a><br>
-        <div class="avail">
-        <a href="availability.html"><button onclick="" id="b"> <i class="fa-regular fa-calendar-days"></i> Availability</button><br></a>
-        </div>
-        <a href="cbooking.html"><button id="b1"> <i class="fa-solid fa-bread-slice"></i> Booking</button></a>
-        <a href="cmy_profile.html"><button id="b1"> <i class="fa-regular fa-user"></i> My Profile</button></a>
-        <a href="login.html"><button id="b1"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="catererdashboard">
+    <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
+    <hr id="line1">
+
+    <a href="caterer_dashboard.html"><button id="b1"><i class="fa-solid fa-table-cells-large"></i> Overview</button></a>
+    <a href="menu.html"><button id="b1"><i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a>
+    <div class="avail">
+    <a href="availability.html"><button id="b"><i class="fa-regular fa-calendar-days"></i> Availability</button></a>
     </div>
-    </body>
+    <a href="cbooking.html"><button id="b1"><i class="fa-solid fa-bread-slice"></i> Bookings</button></a>
+    <a href="cmy_profile.html"><button id="b1"><i class="fa-regular fa-user"></i> My Profile</button></a>
+    <a href="login.html"><button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="cat_menu_container">
+
+    <div class="menu_header">
+        <div>
+            <h2>Manage Availability</h2>
+            <p>Select dates when you're available to cater events</p>
+        </div>
+    </div>
+
+    <!-- Availability Calendar -->
+    <div class="menu_card">
+        <h3>Availability Calendar</h3>
+        <p>Click dates to toggle availability</p>
+
+    <div class="calendar-header">
+        <button id="prev-month">◀</button>
+        <h3 id="calendar-title"></h3>
+        <button id="next-month">▶</button>
+    </div>
+
+    <div id="calendar" class="calendar-grid"></div>
+
+    <ul id="available-list" class="available-list"></ul>
+
+    </div>
+
+    <!-- Upcoming Dates -->
+    <div class="menu_card">
+        <h3>Upcoming Available Dates</h3>
+
+        <table class="menu-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="dateBody">
+                <!-- Dynamic Available Dates -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Stats -->
+    <div class="menu_card">
+        <h3>Availability Stats</h3>
+
+        <p>Total Available Days: <span id="totalDays">0</span></p>
+        <p>This Month: <span id="thisMonth">0</span></p>
+        <p>Next Month: <span id="nextMonth">0</span></p>
+    </div>
+
+</div>
+
+<script src="../static/available.js"></script>
+</body>
 </html>

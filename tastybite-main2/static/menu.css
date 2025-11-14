@@ -1,0 +1,148 @@
+.cat_menu_container {
+    margin-left: 22%;
+    padding: 30px;
+}
+
+.menu_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu_header h2 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.menu_header p {
+    color: #777;
+    margin-top: 4px;
+}
+
+.add_new_btn {
+    background: #c68f00;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.add_new_btn:hover {
+    background: #ae7f00;
+}
+
+.menu_card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 85%;
+    margin-top: 20px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.08);
+}
+
+.menu_card h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.menu-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.menu-table th {
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+
+.menu-table td {
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f1f1;
+    color: #333;
+    font-size: 15px;
+}
+
+.price {
+    color: #555;
+}
+
+/* Veg / Non-Veg Badge */
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: white;
+}
+
+.badge-veg {
+    background: #26a541;
+}
+
+.badge-nonveg {
+    background: #e53935;
+}
+
+/* Action Buttons */
+.action-btn {
+    padding: 7px 10px;
+    border-radius: 6px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    margin-right: 6px;
+}
+
+.action-btn:hover {
+    background: #eee;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    display: none;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 350px;
+}
+
+.modal-content input{
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.modal-content select {
+    width: 96%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#saveItemBtn, #updateItemBtn {
+    width: 96%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background: #c68f00;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
+}

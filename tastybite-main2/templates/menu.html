@@ -1,21 +1,88 @@
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/menu.css">
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
-    </head> 
-    <body>
-    <div class="catererdashboard">
-        <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
-        <hr id="line1">
-        <a href="caterer_dashboard.html"><button id="b1"> <i class="fa-solid fa-table-cells-large"></i> Overview</button></a><br>
-        <div class="menu">
-        <a href="menu.html"><button id="b"> <i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a><br>
-        </div>
-        <a href="availability.html"><button id="b1"> <i class="fa-regular fa-calendar-days"></i> Availability</button><br></a>
-        <a href="cbooking.html"><button id="b1"> <i class="fa-solid fa-bread-slice"></i> Booking</button></a>
-        <a href="cmy_profile.html"><button id="b1"> <i class="fa-regular fa-user"></i> My Profile</button></a>
-        <a href="login.html"><button id="b1"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+</head>
+
+<body>
+
+<div class="catererdashboard">
+    <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
+    <hr id="line1">
+
+    <a href="caterer_dashboard.html"><button id="b1"><i class="fa-solid fa-table-cells-large"></i> Overview</button></a>
+
+    <div class="menu">
+        <a href="menu.html"><button id="b"><i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a>
     </div>
-    </body>
+
+    <a href="availability.html"><button id="b1"><i class="fa-regular fa-calendar-days"></i> Availability</button></a>
+    <a href="cbooking.html"><button id="b1"><i class="fa-solid fa-bread-slice"></i> Bookings</button></a>
+    <a href="cmy_profile.html"><button id="b1"><i class="fa-regular fa-user"></i> My Profile</button></a>
+    <a href="login.html"><button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+</div>
+
+<div class="cat_menu_container">
+
+    <div class="menu_header">
+        <div>
+            <h2>Manage Menu</h2>
+            <p>Add, edit, or remove items from your menu</p>
+        </div>
+        <button id="add_menu" class="add_new_btn"><i class="fa-solid fa-plus"></i> Add New Item</button>
+    </div>
+
+    <div class="menu_card">
+        <h3>Menu Items</h3>
+
+        <table class="menu-table">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="menuBody">
+                <!-- Dynamic Rows Here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ---------- Modal ---------- -->
+<div class="modal" id="menuModal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Add Menu Item</h3>
+
+        <input type="text" id="itemName" placeholder="Item name">
+        <input type="number" id="itemPrice" placeholder="Price">
+
+        <select id="itemType">
+            <option disabled selected>Select Type</option>
+            <option value="Veg">Veg</option>
+            <option value="Non-Veg">Non-Veg</option>
+        </select>
+
+        <select id="itemCategory">
+            <option disabled selected>Select Category</option>
+            <option>Main Course</option>
+            <option>Appetizer</option>
+            <option>Dessert</option>
+            <option>Snacks</option>
+            <option>Beverage</option>
+        </select>
+
+        <button id="saveItemBtn">Save</button>
+        <button id="updateItemBtn" style="display:none;">Update</button>
+    </div>
+</div>
+
+<script src="../static/menu.js"></script>
+</body>
 </html>

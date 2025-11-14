@@ -439,8 +439,6 @@
 
 /* end of create */
 
-/* cat create */
-
 
 /* user detail */
 
@@ -666,6 +664,7 @@
     background-color:#f3eded;
     padding-left: 20px;
     padding-right: 20px;
+    padding-bottom: 30px;
 }
 
 .welcome .search h4{
@@ -686,7 +685,7 @@
     background-color: #ffffff;
     border-radius: 5px;
     color: #7c7575;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 .welcome .search #search{
     height: 35px;
@@ -699,47 +698,72 @@
     margin-left: 20px;
 }
 
+/* Container for caterer cards */
 #catererContainer {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+    padding: 15px;
 }
 
+/* Individual card */
 .caterer-card {
-    width: 250px;
-    background-color: #fffaf0;
-    border: 1px solid #ddd;
+    background: #fff;
     border-radius: 10px;
-    padding: 10px;
-    text-align: center;
+    padding: 15px;
+    border: 1px solid #ddd;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
+    transition: 0.3s;
+    text-align: center;
 }
 
+/* Hover effect */
 .caterer-card:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.18);
 }
 
+/* Images */
 .caterer-image {
     width: 100%;
-    height: 150px;
-    border-radius: 8px;
+    height: 170px;
     object-fit: cover;
+    border-radius: 8px;
 }
 
+/* Name text */
+.caterer-card h3 {
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Info text */
+.caterer-card p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* View button */
 .view-btn {
-    background-color: #ff6600;
+    background-color: #ff6b35;
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 10px 15px;
     margin-top: 10px;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
 }
 
 .view-btn:hover {
-    background-color: #e65500;
+    background-color: #e85c2b;
 }
+
 
 
 /* end of user dashboard */
@@ -869,14 +893,14 @@
 }
 
 .catererdashboard .fa-utensils{
-    color:#880e21;
+    color:rgb(217, 167, 3);
     font-size: 25px;
     margin-top: 15px;
 
 }
 
 .catererdashboard h4{
-    color: #880e21;
+    color: rgb(217, 167, 3);
     font-size: 28px;
     margin-top: 10px;
     display: inline;
@@ -887,8 +911,8 @@
     height: 50px;
     width: 90%;
     color: #ffffff;
-    background-color: #880e21;
-    border: 1px solid black;
+    background-color: rgb(217, 167, 3);
+    border: 1px solid rgb(255, 255, 255);
     font-size: 15px;
     text-align: center;
     margin-top: 7px;
@@ -909,8 +933,8 @@
 .catererdashboard #b1{
     height: 50px;
     width: 90%;
-    color: #880e21;
-    background-color: #e6e0e0;
+    color: #000000;
+    background-color: #e9e7ca;
     font-size: 15px;
     text-align: left;
     margin-top: 10px;
@@ -920,7 +944,7 @@
 }
 .catererdashboard .fa-calendar-minus, .catererdashboard .fa-user, .catererdashboard .fa-bread-slice, .catererdashboard .fa-arrow-right-from-bracket, .catererdashboard .fa-calendar-days{
     font-size: 18px;
-    color: #880e21;
+    color: rgb(0, 0, 0);
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -934,7 +958,7 @@
 
 .menu .fa-calendar-minus{
     font-size: 18px;
-    color: #ffffff;
+    color: #000000;
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -945,8 +969,8 @@
     height: 50px;
     width: 90%;
     color: #ffffff;
-    background-color: #880e21;
-    border: 1px solid black;
+    background-color: rgb(217, 167, 3);
+    border: 1px solid rgb(255, 255, 255);
     font-size: 15px;
     text-align: center;
     margin-top: 7px;
@@ -956,12 +980,42 @@
 }
 .catererdashboard .fa-table-cells-large{
     font-size: 18px;
-    color: #880e21;
+    color: #000000;
     float: left;
     margin-left: 10px;
     margin-top: auto;
     margin-right: 20px;
 }
+
+.cat_menu{
+    text-align: left;
+    margin-top: 20px;
+    margin-left: 22%;
+}
+.cat_menu h2{
+    color: #000000;
+    font-size: 40px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.cat_menu p1{
+    font-size: 18px;
+    color: #4e4848;
+    margin-bottom: 20px;
+}
+
+.cat_menu #add_menu{
+    float: right;
+    margin-top: 0px;
+    margin-right: 60px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(217, 167, 3);
+    color: white;
+}
+
 
 /* end of menu */
 
@@ -969,7 +1023,7 @@
 
 .avail .fa-calendar-days{
     font-size: 18px;
-    color: #ffffff;
+    color: #000000;
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -980,8 +1034,8 @@
     height: 50px;
     width: 90%;
     color: #ffffff;
-    background-color: #880e21;
-    border: 1px solid black;
+    background-color: rgb(217, 167, 3);
+    border: 1px solid rgb(255, 255, 255);
     font-size: 15px;
     text-align: center;
     margin-top: 7px;
@@ -991,7 +1045,7 @@
 }
 .userdashboard .fa-calendar-minus{
     font-size: 18px;
-    color: #880e21;
+    color: #000000;
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -1004,7 +1058,7 @@
 
 .cbook .fa-bread-slice{
     font-size: 18px;
-    color: #ffffff;
+    color: #000000;
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -1015,8 +1069,8 @@
     height: 50px;
     width: 90%;
     color: #ffffff;
-    background-color: #880e21;
-    border: 1px solid black;
+    background-color: rgb(217, 167, 3);
+    border: 1px solid rgb(255, 255, 255);
     font-size: 15px;
     text-align: center;
     margin-top: 7px;
@@ -1026,7 +1080,7 @@
 }
 .userdashboard .fa-calendar-days{
     font-size: 18px;
-    color: #880e21;
+    color: #000000;
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -1039,7 +1093,7 @@
 
 .cprof .fa-user{
     font-size: 18px;
-    color: #ffffff;
+    color: #000000;
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -1050,8 +1104,8 @@
     height: 50px;
     width: 90%;
     color: #ffffff;
-    background-color: #880e21;
-    border: 1px solid black;
+    background-color: rgb(217, 167, 3);
+    border: 1px solid rgb(255, 255, 255);
     font-size: 15px;
     text-align: center;
     margin-top: 7px;
@@ -1061,7 +1115,7 @@
 }
 .userdashboard .fa-bread-slice{
     font-size: 18px;
-    color: #880e21;
+    color: #000000;
     float: left;
     margin-left: 10px;
     margin-top: auto;
