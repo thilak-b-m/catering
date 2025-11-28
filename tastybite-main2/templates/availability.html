@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/available.css">
+    <title>Availability | TastyBite Caterer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='available.css') }}">
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
 </head>
 
@@ -13,46 +14,51 @@
     <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
     <hr id="line1">
 
-    <a href="caterer_dashboard.html"><button id="b1"><i class="fa-solid fa-table-cells-large"></i> Overview</button></a>
-    <a href="menu.html"><button id="b1"><i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a>
+    <a href="{{ url_for('caterer_dashboard') }}"><button id="b1"><i class="fa-solid fa-table-cells-large"></i> Overview</button></a>
+    <a href="{{ url_for('manage_menu') }}"><button id="b1"><i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a>
+
     <div class="avail">
-    <a href="availability.html"><button id="b"><i class="fa-regular fa-calendar-days"></i> Availability</button></a>
+        <a href="{{ url_for('availability') }}"><button id="b"><i class="fa-regular fa-calendar-days"></i> Availability</button></a>
     </div>
-    <a href="cbooking.html"><button id="b1"><i class="fa-solid fa-bread-slice"></i> Bookings</button></a>
-    <a href="cmy_profile.html"><button id="b1"><i class="fa-regular fa-user"></i> My Profile</button></a>
-    <a href="login.html"><button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+
+    <a href="{{ url_for('caterer_bookings') }}"><button id="b1"><i class="fa-solid fa-bread-slice"></i> Bookings</button></a>
+    <a href="{{ url_for('caterer_profile') }}"><button id="b1"><i class="fa-regular fa-user"></i> My Profile</button></a>
+    <a href="{{ url_for('login') }}"><button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
 </div>
+
 
 <!-- MAIN CONTAINER -->
 <div class="cat_menu_container">
 
     <div class="menu_header">
         <div>
-            <h2>Manage Availability</h2>
+            <h2><i class="fa-solid fa-calendar-check"></i> Manage Availability</h2>
             <p>Select dates when you're available to cater events</p>
         </div>
     </div>
 
     <!-- Availability Calendar -->
     <div class="menu_card">
-        <h3>Availability Calendar</h3>
-        <p>Click dates to toggle availability</p>
+        <h3><i class="fa-solid fa-calendar"></i> Availability Calendar</h3>
+        <p class="calendar-hint">Click on dates to mark them as available. Click again to remove.</p>
 
-    <div class="calendar-header">
-        <button id="prev-month">◀</button>
-        <h3 id="calendar-title"></h3>
-        <button id="next-month">▶</button>
-    </div>
+        <div class="calendar-header">
+            <button id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
+            <h3 id="calendar-title"></h3>
+            <button id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
 
-    <div id="calendar" class="calendar-grid"></div>
+        <div class="legend">
+            <span class="legend-item"><span class="legend-dot available"></span> Available</span>
+            <span class="legend-item"><span class="legend-dot unavailable"></span> Not Set</span>
+        </div>
 
-    <ul id="available-list" class="available-list"></ul>
-
+        <div id="calendar" class="calendar-grid"></div>
     </div>
 
     <!-- Upcoming Dates -->
     <div class="menu_card">
-        <h3>Upcoming Available Dates</h3>
+        <h3><i class="fa-solid fa-list-check"></i> Upcoming Available Dates</h3>
 
         <table class="menu-table">
             <thead>
@@ -63,22 +69,144 @@
             </thead>
 
             <tbody id="dateBody">
-                <!-- Dynamic Available Dates -->
+                <!-- Dynamic rows from JS -->
             </tbody>
         </table>
     </div>
 
     <!-- Stats -->
-    <div class="menu_card">
-        <h3>Availability Stats</h3>
+    <div class="menu_card stats-card">
+        <h3><i class="fa-solid fa-chart-simple"></i> Availability Stats</h3>
 
-        <p>Total Available Days: <span id="totalDays">0</span></p>
-        <p>This Month: <span id="thisMonth">0</span></p>
-        <p>Next Month: <span id="nextMonth">0</span></p>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number" id="totalDays">0</span>
+                <span class="stat-label">Total Available Days</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="thisMonth">0</span>
+                <span class="stat-label">This Month</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="nextMonth">0</span>
+                <span class="stat-label">Next Month</span>
+            </div>
+        </div>
     </div>
 
 </div>
 
-<script src="../static/available.js"></script>
+<style>
+    .menu_header h2 i {
+        color: rgb(217, 167, 3);
+        margin-right: 10px;
+    }
+    
+    .calendar-hint {
+        color: #888;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    
+    .legend {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #666;
+    }
+    
+    .legend-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+    }
+    
+    .legend-dot.available {
+        background: #e8c053;
+    }
+    
+    .legend-dot.unavailable {
+        background: #e0e0e0;
+    }
+    
+    .menu_card h3 i {
+        color: rgb(217, 167, 3);
+        margin-right: 8px;
+    }
+    
+    .stats-card .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 15px;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+    
+    .stat-number {
+        display: block;
+        font-size: 36px;
+        font-weight: 700;
+        color: rgb(217, 167, 3);
+    }
+    
+    .stat-label {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .remove-btn {
+        background: #f8d7da;
+        color: #721c24;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s;
+    }
+    
+    .remove-btn:hover {
+        background: #f5c6cb;
+    }
+    
+    .calendar-header button {
+        background: rgb(217, 167, 3);
+        color: white;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .calendar-header button:hover {
+        background: #c9980a;
+    }
+    
+    .date.past {
+        color: #ccc;
+    }
+</style>
+
+<script src="{{ url_for('static', filename='available.js') }}"></script>
 </body>
 </html>

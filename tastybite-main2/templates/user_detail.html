@@ -1,20 +1,39 @@
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
+    <title>User Details | TastyBite</title>
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../static/style.css">
-    </head>
-    <body>
-        <div class="u_detail">
-            <div class="d1">
-            <i class="fa-solid fa-utensils"></i><h4 id="tastybite">TastyBite</h4><br><br>
-            <form action="/verify" method="post">
-                <input type="text" id="name" placeholder="Your Name" required><br>
-                <input type="text" id="phone" placeholder="Your Phone Number" required><br>
-                <input type="text" id="address" placeholder="Your Address" required><br>
-                <a href="user_dashboard.html" id="sub">Register User </a>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="u_detail">
+        <div class="d1">
+            <i class="fa-solid fa-utensils"></i>
+            <h4 id="tastybite">TastyBite</h4><br><br>
+            <form id="userDetailForm" action="{{ url_for('submit_user_detail') }}" method="post">
+                <input type="hidden" id="firebase_uid" name="firebase_uid" value="">
+                <input type="hidden" id="email" name="email" value="">
+                <input type="text" id="name" name="name" placeholder="Your Name" required><br>
+                <input type="text" id="phone" name="phone" placeholder="Your Phone Number" required><br>
+                <input type="text" id="address" name="address" placeholder="Your Address" required><br>
+                <button type="submit" id="sub">Register User</button>            
             </form>
-            </div>
         </div>
-    </body>
+    </div>
+
+    <script>
+        // Get firebase_uid and email from sessionStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const firebaseUid = sessionStorage.getItem('firebase_uid');
+            const email = sessionStorage.getItem('user_email');
+            
+            if (firebaseUid) {
+                document.getElementById('firebase_uid').value = firebaseUid;
+            }
+            if (email) {
+                document.getElementById('email').value = email;
+            }
+        });
+    </script>
+</body>
 </html>

@@ -1,21 +1,479 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <link rel="stylesheet" href="../static/style.css">
+<head>
+    <title>Bookings | TastyBite Caterer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='booking.css') }}">
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
-    </head> 
-    <body>
-    <div class="catererdashboard">
-        <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
-        <hr id="line1">
-        <a href="caterer_dashboard.html"><button id="b1"> <i class="fa-solid fa-table-cells-large"></i> Overview</button></a><br>
-        <a href="menu.html"><button id="b1"> <i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a><br>
-        <a href="availability.html"><button onclick="" id="b1"> <i class="fa-regular fa-calendar-days"></i> Availability</button><br></a>
-        <div class="cbook">
-        <a href="cbooking.html"><button id="b"> <i class="fa-solid fa-bread-slice"></i> Booking</button></a>
-        </div>
-        <a href="cmy_profile.html"><button id="b1"> <i class="fa-regular fa-user"></i> My Profile</button></a>
-        <a href="login.html"><button id="b1"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+</head> 
+<body>
+
+<div class="catererdashboard">
+    <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
+    <hr id="line1">
+
+    <a href="{{ url_for('caterer_dashboard') }}">
+        <button id="b1"><i class="fa-solid fa-table-cells-large"></i> Overview</button>
+    </a><br>
+
+    <a href="{{ url_for('manage_menu') }}">
+        <button id="b1"><i class="fa-regular fa-calendar-minus"></i> Manage Menu</button>
+    </a><br>
+
+    <a href="{{ url_for('availability') }}">
+        <button id="b1"><i class="fa-regular fa-calendar-days"></i> Availability</button>
+    </a><br>
+
+    <div class="cbook">
+        <a href="{{ url_for('caterer_bookings') }}">
+            <button id="b"><i class="fa-solid fa-bread-slice"></i> Booking</button>
+        </a>
     </div>
-    </body>
+
+    <a href="{{ url_for('caterer_profile') }}">
+        <button id="b1"><i class="fa-regular fa-user"></i> My Profile</button>
+    </a>
+
+    <a href="{{ url_for('login') }}">
+        <button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+    </a>
+</div>
+
+
+<div class="booking-status-container">
+    <h2 class="section-title"><i class="fa-solid fa-clipboard-list"></i> Booking Management</h2>
+    <p class="subtitle">Review and manage your booking requests</p>
+
+    <!-- Stats Summary -->
+    <div class="booking-stats">
+        <div class="stat-pill pending">
+            <span id="pendingCount">0</span> Pending
+        </div>
+        <div class="stat-pill accepted">
+            <span id="acceptedCount">0</span> Accepted
+        </div>
+        <div class="stat-pill rejected">
+            <span id="rejectedCount">0</span> Rejected
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <button class="tab-btn active" data-status="all">All Bookings</button>
+        <button class="tab-btn" data-status="pending">Pending</button>
+        <button class="tab-btn" data-status="accepted">Accepted</button>
+        <button class="tab-btn" data-status="rejected">Rejected</button>
+    </div>
+
+    <div id="bookingsContainer">
+        <p class="loading">Loading bookings...</p>
+    </div>
+</div>
+
+<style>
+    .booking-status-container {
+        margin-left: 22%;
+        padding: 30px;
+        max-width: 850px;
+    }
+    
+    .section-title {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .section-title i {
+        color: rgb(217, 167, 3);
+        margin-right: 10px;
+    }
+    
+    .subtitle {
+        color: #666;
+        margin-bottom: 25px;
+    }
+    
+    .booking-stats {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .stat-pill {
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    
+    .stat-pill.pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .stat-pill.accepted {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .stat-pill.rejected {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .stat-pill span {
+        font-size: 18px;
+        margin-right: 5px;
+    }
+    
+    .filter-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        padding: 10px 20px;
+        border: 2px solid rgb(217, 167, 3);
+        background: white;
+        color: rgb(150, 115, 0);
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .tab-btn:hover,
+    .tab-btn.active {
+        background: rgb(217, 167, 3);
+        color: white;
+    }
+    
+    .booking-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        border-left: 5px solid #ffa500;
+        transition: transform 0.2s;
+    }
+    
+    .booking-card:hover {
+        transform: translateX(5px);
+    }
+    
+    .booking-card.accepted {
+        border-left-color: #28a745;
+    }
+    
+    .booking-card.rejected {
+        border-left-color: #dc3545;
+    }
+    
+    .booking-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+    
+    .booking-info h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .booking-id {
+        font-size: 13px;
+        color: #888;
+    }
+    
+    .status {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .status.pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .status.accepted {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status.rejected {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .booking-body {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .booking-body p {
+        margin: 0;
+        color: #555;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .booking-body i {
+        color: rgb(217, 167, 3);
+        width: 18px;
+    }
+    
+    .special-requests {
+        background: #f8f9fa;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+        grid-column: span 2;
+    }
+    
+    .special-requests strong {
+        color: rgb(217, 167, 3);
+    }
+    
+    .booking-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid #eee;
+    }
+    
+    .accept-btn, .reject-btn {
+        padding: 10px 25px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+    
+    .accept-btn {
+        background: #28a745;
+        color: white;
+    }
+    
+    .accept-btn:hover {
+        background: #218838;
+    }
+    
+    .reject-btn {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .reject-btn:hover {
+        background: #c82333;
+    }
+    
+    .no-bookings {
+        text-align: center;
+        padding: 60px 30px;
+        background: white;
+        border-radius: 15px;
+        color: #888;
+    }
+    
+    .no-bookings i {
+        font-size: 60px;
+        color: #ddd;
+        margin-bottom: 20px;
+        display: block;
+    }
+    
+    .loading {
+        text-align: center;
+        padding: 40px;
+        color: #888;
+    }
+    
+    .contact-btn {
+        padding: 8px 16px;
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        color: #333;
+        text-decoration: none;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .contact-btn:hover {
+        background: #e9ecef;
+    }
+</style>
+
+<script>
+let allBookings = [];
+
+async function loadBookings() {
+    try {
+        const response = await fetch('/api/bookings');
+        allBookings = await response.json();
+        
+        updateStats();
+        displayBookings('all');
+    } catch (error) {
+        console.error('Error loading bookings:', error);
+        document.getElementById('bookingsContainer').innerHTML = 
+            '<p class="loading">Error loading bookings. Please refresh the page.</p>';
+    }
+}
+
+function updateStats() {
+    const pending = allBookings.filter(b => b.status === 'pending').length;
+    const accepted = allBookings.filter(b => b.status === 'accepted').length;
+    const rejected = allBookings.filter(b => b.status === 'rejected').length;
+    
+    document.getElementById('pendingCount').textContent = pending;
+    document.getElementById('acceptedCount').textContent = accepted;
+    document.getElementById('rejectedCount').textContent = rejected;
+}
+
+function displayBookings(statusFilter) {
+    const container = document.getElementById('bookingsContainer');
+    
+    let filtered = allBookings;
+    if (statusFilter !== 'all') {
+        filtered = allBookings.filter(b => b.status === statusFilter);
+    }
+    
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="no-bookings">
+                <i class="fa-regular fa-calendar-xmark"></i>
+                <h3>No bookings found</h3>
+                <p>${statusFilter === 'all' ? 'You haven\'t received any booking requests yet.' : 'No ' + statusFilter + ' bookings.'}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = filtered.map(booking => {
+        const eventDate = new Date(booking.event_date + 'T00:00:00');
+        const formattedDate = eventDate.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        const isPending = booking.status === 'pending';
+        
+        return `
+            <div class="booking-card ${booking.status}">
+                <div class="booking-header">
+                    <div class="booking-info">
+                        <h3><i class="fa-solid fa-user"></i> ${booking.user_name}</h3>
+                        <span class="booking-id">Booking #${booking.booking_id}</span>
+                    </div>
+                    <span class="status ${booking.status}">${booking.status}</span>
+                </div>
+                
+                <div class="booking-body">
+                    <p><i class="fa-regular fa-calendar"></i> ${formattedDate}</p>
+                    <p><i class="fa-regular fa-clock"></i> ${booking.event_time || 'Time not specified'}</p>
+                    <p><i class="fa-solid fa-location-dot"></i> ${booking.location || 'Location not specified'}</p>
+                    <p><i class="fa-solid fa-users"></i> ${booking.guest_count} guests</p>
+                    <p><i class="fa-solid fa-phone"></i> ${booking.user_phone}</p>
+                    <p><i class="fa-solid fa-map-marker-alt"></i> ${booking.user_address}</p>
+                    ${booking.special_requests ? `
+                        <div class="special-requests">
+                            <strong><i class="fa-solid fa-message"></i> Special Requests:</strong><br>
+                            ${booking.special_requests}
+                        </div>
+                    ` : ''}
+                </div>
+                
+                ${isPending ? `
+                    <div class="booking-actions">
+                        <button class="accept-btn" onclick="updateBookingStatus(${booking.booking_id}, 'accepted')">
+                            <i class="fa-solid fa-check"></i> Accept
+                        </button>
+                        <button class="reject-btn" onclick="updateBookingStatus(${booking.booking_id}, 'rejected')">
+                            <i class="fa-solid fa-xmark"></i> Reject
+                        </button>
+                        <a href="tel:${booking.user_phone}" class="contact-btn">
+                            <i class="fa-solid fa-phone"></i> Contact
+                        </a>
+                    </div>
+                ` : `
+                    <div class="booking-actions">
+                        <a href="tel:${booking.user_phone}" class="contact-btn">
+                            <i class="fa-solid fa-phone"></i> Contact Customer
+                        </a>
+                    </div>
+                `}
+            </div>
+        `;
+    }).join('');
+}
+
+async function updateBookingStatus(bookingId, status) {
+    const action = status === 'accepted' ? 'accept' : 'reject';
+    if (!confirm(`Are you sure you want to ${action} this booking?`)) return;
+    
+    try {
+        const response = await fetch(`/api/bookings/${bookingId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+        });
+        
+        if (response.ok) {
+            // Update local data and re-render
+            const booking = allBookings.find(b => b.booking_id === bookingId);
+            if (booking) {
+                booking.status = status;
+            }
+            
+            updateStats();
+            
+            // Get current filter and re-display
+            const activeTab = document.querySelector('.tab-btn.active');
+            displayBookings(activeTab ? activeTab.dataset.status : 'all');
+        } else {
+            alert('Failed to update booking status');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error updating booking');
+    }
+}
+
+// Filter tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        displayBookings(btn.dataset.status);
+    });
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', loadBookings);
+</script>
+
+</body>
 </html>

@@ -1,0 +1,83 @@
+.booking-status-container {
+    margin-left: 22%;
+    padding: 20px;
+    width: 70%;
+}
+
+.section-title {
+    font-size: 24px;
+    color: #880e21;
+    margin-bottom: 15px;
+}
+
+.booking-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.15);
+}
+
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.booking-id {
+    font-weight: bold;
+    font-size: 18px;
+    color: #444;
+}
+
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #fff;
+}
+
+.status.pending {
+    background-color: #ffa500;
+}
+
+.status.accepted {
+    background-color: #28a745;
+}
+
+.status.rejected {
+    background-color: #dc3545;
+}
+
+.booking-body p {
+    font-size: 15px;
+    margin: 6px 0;
+    color: #333;
+}
+
+.booking-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.accept-btn, .reject-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #fff;
+}
+
+.accept-btn {
+    background-color: #28a745;
+}
+
+.reject-btn {
+    background-color: #dc3545;
+}
+
+.accept-btn:hover, .reject-btn:hover {
+    opacity: 0.85;
+}

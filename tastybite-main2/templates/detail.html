@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caterer Details | TastyBite</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='detail.css') }}">
+    <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="userdashboard">
+        <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
+        <hr id="line1">
+
+        <a href="{{ url_for('user_dashboard') }}"><button id="b1"><i class="fa-regular fa-house"></i> Search Caterers</button></a><br>
+        <a href="{{ url_for('my_booking') }}"><button id="b1"><i class="fa-solid fa-bread-slice"></i> My bookings</button></a><br>
+        <a href="{{ url_for('my_profile') }}"><button id="b1"><i class="fa-regular fa-user"></i> My Profile</button></a><br>
+        <a href="{{ url_for('login') }}"><button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+    </div>
+
+    <div class="detail-container">
+        <!-- Caterer Header -->
+        <div class="caterer-header">
+            <img id="catererImage" src="{{ url_for('static', filename='images/cater1.jpg') }}" alt="Caterer">
+            <div class="caterer-info">
+                <h1 id="catererName">Loading...</h1>
+                <p id="catererCuisine"><i class="fa-solid fa-utensils"></i> <span>Multi-cuisine</span></p>
+                <p id="catererAddress"><i class="fa-solid fa-location-dot"></i> <span>Loading...</span></p>
+                <p id="catererPhone"><i class="fa-solid fa-phone"></i> <span>Loading...</span></p>
+                <p id="catererEmail"><i class="fa-solid fa-envelope"></i> <span>Loading...</span></p>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="detail-card">
+            <h3><i class="fa-solid fa-info-circle"></i> About</h3>
+            <p id="catererDescription">Loading description...</p>
+        </div>
+
+        <!-- Menu Section -->
+        <div class="detail-card">
+            <h3><i class="fa-solid fa-book-open"></i> Menu Items</h3>
+            <div class="menu-filter">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="Veg">Veg</button>
+                <button class="filter-btn" data-filter="Non-Veg">Non-Veg</button>
+            </div>
+            <div id="menuContainer" class="menu-grid">
+                <p>Loading menu...</p>
+            </div>
+        </div>
+
+        <!-- Availability Section -->
+        <div class="detail-card">
+            <h3><i class="fa-solid fa-calendar-check"></i> Available Dates</h3>
+            <div id="availabilityContainer" class="availability-grid">
+                <p>Loading availability...</p>
+            </div>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="detail-card booking-card">
+            <h3><i class="fa-solid fa-calendar-plus"></i> Book This Caterer</h3>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="eventDate">Event Date *</label>
+                    <select id="eventDate" required>
+                        <option value="">Select available date</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="eventTime">Event Time</label>
+                    <input type="time" id="eventTime" value="12:00">
+                </div>
+                <div class="form-group">
+                    <label for="location">Event Location *</label>
+                    <input type="text" id="location" placeholder="Enter venue address" required>
+                </div>
+                <div class="form-group">
+                    <label for="guestCount">Number of Guests *</label>
+                    <input type="number" id="guestCount" min="10" max="1000" value="50" required>
+                </div>
+                <div class="form-group">
+                    <label for="specialRequests">Special Requests</label>
+                    <textarea id="specialRequests" rows="3" placeholder="Any dietary requirements or special instructions..."></textarea>
+                </div>
+                <button type="submit" class="book-btn">
+                    <i class="fa-solid fa-paper-plane"></i> Send Booking Request
+                </button>
+            </form>
+            <p id="bookingMessage" class="booking-message"></p>
+        </div>
+
+        <a href="{{ url_for('user_dashboard') }}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Caterers
+        </a>
+    </div>
+
+    <script>
+const catererId = {{ caterer_id }};
+let availableDates = [];
+let menuItems = [];
+
+const images = [
+    "{{ url_for('static', filename='images/cater1.jpg') }}",
+    "{{ url_for('static', filename='images/cater2.avif') }}",
+    "{{ url_for('static', filename='images/cater3.jpg') }}",
+    "{{ url_for('static', filename='images/cater4.jpg') }}",
+    "{{ url_for('static', filename='images/cater5.jpg') }}"
+];
+
+// Load caterer details
+async function loadCatererDetails() {
+    try {
+        const response = await fetch(`/api/caterers/${catererId}`);
+        const caterer = await response.json();
+        
+        if (caterer.error) {
+            alert('Caterer not found');
+            window.location.href = '/user_dashboard';
+            return;
+        }
+
+        document.getElementById('catererName').textContent = caterer.name;
+        document.getElementById('catererCuisine').querySelector('span').textContent = caterer.cuisine_type || 'Multi-cuisine';
+        document.getElementById('catererAddress').querySelector('span').textContent = caterer.address;
+        document.getElementById('catererPhone').querySelector('span').textContent = caterer.phone;
+        document.getElementById('catererEmail').querySelector('span').textContent = caterer.email || 'Not provided';
+        document.getElementById('catererDescription').textContent = caterer.description || 'Professional catering service dedicated to making your events memorable with delicious food and excellent service.';
+        document.getElementById('catererImage').src = images[Math.floor(Math.random() * images.length)];
+        
+    } catch (error) {
+        console.error('Error loading caterer:', error);
+    }
+}
+
+// Load menu items
+async function loadMenu() {
+    try {
+        const response = await fetch(`/api/menu?caterer_id=${catererId}`);
+        menuItems = await response.json();
+        displayMenu('all');
+    } catch (error) {
+        console.error('Error loading menu:', error);
+    }
+}
+
+function displayMenu(filter) {
+    const container = document.getElementById('menuContainer');
+    
+    let filtered = menuItems;
+    if (filter !== 'all') {
+        filtered = menuItems.filter(item => item.type === filter);
+    }
+    
+    if (filtered.length === 0) {
+        container.innerHTML = '<p class="no-items">No menu items available.</p>';
+        return;
+    }
+
+    container.innerHTML = filtered.map(item => `
+        <div class="menu-item ${item.type === 'Veg' ? 'veg' : 'nonveg'}">
+            <div class="menu-item-header">
+                <span class="menu-name">${item.name}</span>
+                <span class="menu-badge ${item.type === 'Veg' ? 'badge-veg' : 'badge-nonveg'}">${item.type}</span>
+            </div>
+            <div class="menu-item-details">
+                <span class="menu-category">${item.category}</span>
+                <span class="menu-price">₹${item.price}/plate</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Menu filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        displayMenu(btn.dataset.filter);
+    });
+});
+
+// Load availability
+async function loadAvailability() {
+    try {
+        const response = await fetch(`/api/availability?caterer_id=${catererId}`);
+        const dates = await response.json();
+        
+        availableDates = dates.map(d => d.available_date);
+        displayAvailability();
+        populateDateDropdown();
+    } catch (error) {
+        console.error('Error loading availability:', error);
+    }
+}
+
+function displayAvailability() {
+    const container = document.getElementById('availabilityContainer');
+    
+    // Filter to future dates only
+    const today = new Date().toISOString().split('T')[0];
+    const futureDates = availableDates.filter(d => d >= today).slice(0, 8);
+    
+    if (futureDates.length === 0) {
+        container.innerHTML = '<p class="no-items">No available dates at the moment. Contact the caterer for special arrangements.</p>';
+        return;
+    }
+
+    container.innerHTML = futureDates.map(date => {
+        const d = new Date(date + 'T00:00:00');
+        return `
+            <div class="date-chip">
+                <span class="date-day">${d.getDate()}</span>
+                <span class="date-month">${d.toLocaleString('default', { month: 'short' })}</span>
+                <span class="date-year">${d.getFullYear()}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function populateDateDropdown() {
+    const select = document.getElementById('eventDate');
+    const today = new Date().toISOString().split('T')[0];
+    const futureDates = availableDates.filter(d => d >= today);
+    
+    select.innerHTML = '<option value="">Select available date</option>';
+    
+    futureDates.forEach(date => {
+        const d = new Date(date + 'T00:00:00');
+        const option = document.createElement('option');
+        option.value = date;
+        option.textContent = d.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        select.appendChild(option);
+    });
+}
+
+// Handle booking form
+document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const messageEl = document.getElementById('bookingMessage');
+    
+    const bookingData = {
+        caterer_id: catererId,
+        event_date: document.getElementById('eventDate').value,
+        event_time: document.getElementById('eventTime').value,
+        location: document.getElementById('location').value,
+        guest_count: parseInt(document.getElementById('guestCount').value),
+        special_requests: document.getElementById('specialRequests').value
+    };
+
+    if (!bookingData.event_date) {
+        messageEl.textContent = '❌ Please select an event date';
+        messageEl.className = 'booking-message error';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bookingData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            messageEl.textContent = '✅ Booking request sent successfully! The caterer will review your request.';
+            messageEl.className = 'booking-message success';
+            document.getElementById('bookingForm').reset();
+            
+            setTimeout(() => {
+                window.location.href = '/my_booking';
+            }, 2000);
+        } else {
+            messageEl.textContent = `❌ ${result.error || 'Failed to create booking'}`;
+            messageEl.className = 'booking-message error';
+        }
+    } catch (error) {
+        messageEl.textContent = '❌ Error sending booking request. Please try again.';
+        messageEl.className = 'booking-message error';
+        console.error('Booking error:', error);
+    }
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    loadCatererDetails();
+    loadMenu();
+    loadAvailability();
+});
+    </script>
+</body>
+</html>
+

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="../static/style.css">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
 <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script></head> 
 <body>
 <div class="loginpage">
@@ -11,7 +11,7 @@
 <hr id="line1">
 <h1>
     Book the Best Catering <br>
-    Servive for Your Special Moments!
+    Service for Your Special Moments!
 </h1>
 <p>Connect with professional caterers for wedding, corporate events, parties, and more. </p>
 <div class="container">
@@ -19,14 +19,14 @@
     <i class="fa-regular fa-user"></i><br><br>
     <h4>User Login</h4><br>
     <p1>Find and book the perfect caterer for your event</p1><br><br>
-    <a href="userlogin.html"><button  id="b1">Login as User</button></a>
+    <a href="{{ url_for('userlogin') }}"><button  id="b1">Login as User</button></a>
 
 </div>
 <div class="caterer">
     <i class="fa-solid fa-bread-slice"></i><br><br>
     <h4>Caterer Login</h4><br>
     <p1>Manage your catering business and bookings</p1><br><br>
-    <a href="catererlogin.html"> <button id="b2">Login as Caterer</button></a>
+    <a href="{{ url_for('catererlogin') }}"> <button id="b2">Login as Caterer</button></a>
 </div>
 </div>
 <div class="container1">

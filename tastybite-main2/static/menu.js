@@ -1,92 +1,132 @@
-let editIndex = null;
+let editId = null;
 
-// Show modal
-document.getElementById("add_menu").onclick = function () {
+// Helpers to show/hide modal
+function showModal(kind = "add") {
     document.getElementById("menuModal").style.display = "flex";
+    if (kind === "add") {
+        document.getElementById("modalTitle").innerText = "Add Menu Item";
+        document.getElementById("saveItemBtn").style.display = "block";
+        document.getElementById("updateItemBtn").style.display = "none";
+        document.getElementById("itemName").value = "";
+        document.getElementById("itemPrice").value = "";
+        document.getElementById("itemType").value = "";
+        document.getElementById("itemCategory").value = "";
+    } else {
+        document.getElementById("modalTitle").innerText = "Edit Menu Item";
+        document.getElementById("saveItemBtn").style.display = "none";
+        document.getElementById("updateItemBtn").style.display = "block";
+    }
+}
+function hideModal() {
+    document.getElementById("menuModal").style.display = "none";
+}
 
-    document.getElementById("modalTitle").innerText = "Add Menu Item";
-    document.getElementById("updateItemBtn").style.display = "none";
-    document.getElementById("saveItemBtn").style.display = "block";
+// Load items from server
+async function loadMenu(caterer_id=null) {
+    const qs = caterer_id ? `?caterer_id=${encodeURIComponent(caterer_id)}` : "";
+    const res = await fetch(`/api/menu${qs}`);
+    const items = await res.json();
+    const tbody = document.getElementById("menuBody");
+    tbody.innerHTML = "";
 
-    document.getElementById("itemName").value = "";
-    document.getElementById("itemPrice").value = "";
-    document.getElementById("itemType").value = "";
-    document.getElementById("itemCategory").value = "";
+    items.forEach(item => {
+        const badge = item.type === "Veg" ? "badge-veg" : "badge-nonveg";
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-id", item.id);
+        tr.innerHTML = `
+            <td>${item.name}</td>
+            <td>₹${item.price}/plate</td>
+            <td><span class="badge ${badge}">${item.type}</span></td>
+            <td>${item.category}</td>
+            <td>
+                <button class="action-btn" onclick="editItem(${item.id}, this)"><i class="fa-regular fa-pen-to-square"></i></button>
+                <button class="action-btn" onclick="deleteItem(${item.id})"><i class="fa-regular fa-trash-can"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// initial load
+document.addEventListener("DOMContentLoaded", () => {
+    loadMenu();
+});
+
+// Show modal when Add clicked
+document.getElementById("add_menu").onclick = function () {
+    editId = null;
+    showModal("add");
 };
 
-// Close modal
+// Close modal if click outside content
 window.onclick = function (event) {
-    if (event.target == document.getElementById("menuModal")) {
-        document.getElementById("menuModal").style.display = "none";
+    if (event.target === document.getElementById("menuModal")) {
+        hideModal();
     }
 };
 
-// Add Item
-document.getElementById("saveItemBtn").onclick = function () {
-    const name = itemName.value;
-    const price = itemPrice.value;
-    const type = itemType.value;
-    const category = itemCategory.value;
+// Save new item
+document.getElementById("saveItemBtn").onclick = async function () {
+    const name = document.getElementById("itemName").value.trim();
+    const price = document.getElementById("itemPrice").value;
+    const type = document.getElementById("itemType").value;
+    const category = document.getElementById("itemCategory").value;
 
     if (!name || !price || !type || !category) {
         alert("Please fill all fields");
         return;
     }
 
-    const badge = type === "Veg" ? "badge-veg" : "badge-nonveg";
+    await fetch("/api/menu", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ name, price, type, category })
+    });
 
-    const row = `
-        <tr>
-            <td>${name}</td>
-            <td>₹${price}/plate</td>
-            <td><span class="badge ${badge}">${type}</span></td>
-            <td>${category}</td>
-            <td>
-                <button class="action-btn" onclick="editItem(this)"><i class="fa-regular fa-pen-to-square"></i></button>
-                <button class="action-btn" onclick="deleteItem(this)"><i class="fa-regular fa-trash-can"></i></button>
-            </td>
-        </tr>
-    `;
-
-    document.getElementById("menuBody").innerHTML += row;
-    document.getElementById("menuModal").style.display = "none";
+    hideModal();
+    loadMenu();
 };
 
 // Delete item
-function deleteItem(btn) {
-    btn.closest("tr").remove();
+async function deleteItem(id) {
+    if (!confirm("Delete this item?")) return;
+    await fetch(`/api/menu/${id}`, { method: "DELETE" });
+    loadMenu();
 }
 
-// Edit item
-function editItem(btn) {
+// Edit: open modal with values
+function editItem(id, btn) {
+    editId = id;
     const row = btn.closest("tr");
-    editIndex = row.rowIndex - 1;
-
     const cells = row.children;
 
-    document.getElementById("menuModal").style.display = "flex";
-    document.getElementById("modalTitle").innerText = "Edit Menu Item";
+    document.getElementById("itemName").value = cells[0].innerText;
+    document.getElementById("itemPrice").value = cells[1].innerText.replace("₹","").replace("/plate","");
+    document.getElementById("itemType").value = cells[2].innerText.trim();
+    document.getElementById("itemCategory").value = cells[3].innerText;
 
-    itemName.value = cells[0].innerText;
-    itemPrice.value = cells[1].innerText.replace("₹", "").replace("/plate", "");
-    itemType.value = cells[2].innerText.trim();
-    itemCategory.value = cells[3].innerText;
-
-    document.getElementById("saveItemBtn").style.display = "none";
-    document.getElementById("updateItemBtn").style.display = "block";
+    showModal("edit");
 }
 
 // Update item
-document.getElementById("updateItemBtn").onclick = function () {
-    const table = document.getElementById("menuBody");
-    const row = table.rows[editIndex];
+document.getElementById("updateItemBtn").onclick = async function () {
+    if (!editId) return;
+    const name = document.getElementById("itemName").value.trim();
+    const price = document.getElementById("itemPrice").value;
+    const type = document.getElementById("itemType").value;
+    const category = document.getElementById("itemCategory").value;
 
-    const badge = itemType.value === "Veg" ? "badge-veg" : "badge-nonveg";
+    if (!name || !price || !type || !category) {
+        alert("Please fill all fields");
+        return;
+    }
 
-    row.cells[0].innerText = itemName.value;
-    row.cells[1].innerText = `₹${itemPrice.value}/plate`;
-    row.cells[2].innerHTML = `<span class="badge ${badge}">${itemType.value}</span>`;
-    row.cells[3].innerText = itemCategory.value;
+    await fetch(`/api/menu/${editId}`, {
+        method: "PUT",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ name, price, type, category })
+    });
 
-    document.getElementById("menuModal").style.display = "none";
+    hideModal();
+    loadMenu();
 };

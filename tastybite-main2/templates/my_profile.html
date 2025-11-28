@@ -1,23 +1,268 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <link rel="stylesheet" href="../static/style.css">
+<head>
+    <title>My Profile | TastyBite</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
-    </head> 
-    <body>
+</head> 
+<body>
     <div class="userdashboard">
         <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
         <hr id="line1">
-        <a href="user_dashboard.html"><button id="b1"> <i class="fa-regular fa-house"></i> Search Caterers</button><br></a>
-        <a href="my_booking.html"><button id="b1"><i class="fa-solid fa-bread-slice"></i> My bookings</button><br></a>
+        <a href="{{ url_for('user_dashboard') }}"><button id="b1"><i class="fa-regular fa-house"></i> Search Caterers</button></a><br>
+        <a href="{{ url_for('my_booking') }}"><button id="b1"><i class="fa-solid fa-bread-slice"></i> My bookings</button></a><br>
         <div class="mypro">
-        <a href="my_profile.html"><button id="b"> <i class="fa-regular fa-user"></i> My Profile</button><br></a>
+            <a href="{{ url_for('my_profile') }}"><button id="b"><i class="fa-regular fa-user"></i> My Profile</button></a><br>
         </div>
-        <a href="login.html"><button id="b1"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+        <a href="{{ url_for('login') }}"><button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
     </div>
+    
     <div class="myprofile">
         <h2>My Profile</h2>
-        <p1>Manage your account details</p1>
+        <p>Manage your account details</p>
+        
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="profile-title">
+                    <h3 id="displayName">Loading...</h3>
+                    <p id="displayEmail">Loading...</p>
+                </div>
+            </div>
+            
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="name"><i class="fa-solid fa-user"></i> Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+                    <input type="email" id="email" name="email" placeholder="your.email@example.com" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone"><i class="fa-solid fa-phone"></i> Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address"><i class="fa-solid fa-location-dot"></i> Address</label>
+                    <textarea id="address" name="address" rows="3" placeholder="Your address" required></textarea>
+                </div>
+                
+                <button type="submit" class="save-btn">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                </button>
+            </form>
+            
+            <p id="message" class="message"></p>
+        </div>
     </div>
-    </body>
+
+    <style>
+        .myprofile {
+            margin-left: 22%;
+            padding: 30px;
+            max-width: 600px;
+        }
+        
+        .myprofile h2 {
+            color: #880e21;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        
+        .myprofile > p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .profile-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #880e21, #c4324a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .profile-avatar i {
+            font-size: 35px;
+            color: white;
+        }
+        
+        .profile-title h3 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .profile-title p {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        .form-group label i {
+            color: #880e21;
+            margin-right: 8px;
+            width: 20px;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #880e21;
+        }
+        
+        .form-group input[readonly] {
+            background: #f8f9fa;
+            color: #888;
+            cursor: not-allowed;
+        }
+        
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            background: #880e21;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.3s;
+        }
+        
+        .save-btn:hover {
+            background: #6d0b1a;
+        }
+        
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+
+    <script>
+async function loadProfile() {
+    try {
+        const response = await fetch('/api/user/profile');
+        const profile = await response.json();
+        
+        if (profile.error) {
+            document.getElementById('message').textContent = 'Please complete your profile';
+            document.getElementById('message').className = 'message error';
+            return;
+        }
+        
+        document.getElementById('name').value = profile.name || '';
+        document.getElementById('email').value = profile.email || '';
+        document.getElementById('phone').value = profile.phone || '';
+        document.getElementById('address').value = profile.address || '';
+        
+        document.getElementById('displayName').textContent = profile.name || 'User';
+        document.getElementById('displayEmail').textContent = profile.email || 'No email';
+        
+    } catch (error) {
+        console.error('Error loading profile:', error);
+    }
+}
+
+document.getElementById('profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const messageEl = document.getElementById('message');
+    
+    const profileData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value
+    };
+    
+    try {
+        const response = await fetch('/api/user/profile', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(profileData)
+        });
+        
+        if (response.ok) {
+            messageEl.textContent = '✅ Profile updated successfully!';
+            messageEl.className = 'message success';
+            document.getElementById('displayName').textContent = profileData.name;
+            document.getElementById('displayEmail').textContent = profileData.email;
+        } else {
+            messageEl.textContent = '❌ Failed to update profile';
+            messageEl.className = 'message error';
+        }
+    } catch (error) {
+        messageEl.textContent = '❌ Error updating profile';
+        messageEl.className = 'message error';
+        console.error('Error:', error);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', loadProfile);
+    </script>
+</body>
 </html>

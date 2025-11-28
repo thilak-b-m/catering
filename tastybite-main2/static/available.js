@@ -34,6 +34,64 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Load availability from server
+    async function loadAvailability() {
+        try {
+            const response = await fetch('/api/availability');
+            const data = await response.json();
+            availableDates = data.map(d => d.available_date);
+            
+            renderCalendar();
+            renderTable();
+            updateStats();
+        } catch (error) {
+            console.error('Error loading availability:', error);
+        }
+    }
+
+    // Toggle date on server
+    async function toggleDate(isoDate) {
+        const isAvailable = availableDates.includes(isoDate);
+        
+        try {
+            if (isAvailable) {
+                // Remove date
+                await fetch(`/api/availability/${isoDate}`, {
+                    method: 'DELETE'
+                });
+                availableDates = availableDates.filter(x => x !== isoDate);
+            } else {
+                // Add date
+                const response = await fetch('/api/availability', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ date: isoDate })
+                });
+                
+                if (response.ok) {
+                    availableDates.push(isoDate);
+                } else {
+                    const result = await response.json();
+                    if (result.message === "Date already exists") {
+                        // Date already exists, just update UI
+                        if (!availableDates.includes(isoDate)) {
+                            availableDates.push(isoDate);
+                        }
+                    }
+                }
+            }
+
+            availableDates.sort((a, b) => new Date(a) - new Date(b));
+
+            renderCalendar();
+            renderTable();
+            updateStats();
+        } catch (error) {
+            console.error('Error toggling date:', error);
+            alert('Error updating availability. Please try again.');
+        }
+    }
+
     // Render calendar
     function renderCalendar() {
         calendar.innerHTML = "";
@@ -43,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
         title.innerText = `${current.toLocaleString(undefined, { month: "long" })} ${year}`;
 
         // Weekdays
-        const weekdays = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+        const weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
         weekdays.forEach(w => {
             const wdiv = document.createElement("div");
             wdiv.className = "weekday";
@@ -61,55 +119,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Dates
         const totalDays = new Date(year, month + 1, 0).getDate();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         for (let d = 1; d <= totalDays; d++) {
             const iso = ymd(year, month, d);
             const cell = document.createElement("div");
             cell.className = "date";
             cell.innerText = d;
 
-            if (availableDates.includes(iso)) {
-                cell.classList.add("available");
+            // Check if date is in the past
+            const dateObj = new Date(year, month, d);
+            const isPast = dateObj < today;
+
+            if (isPast) {
+                cell.classList.add("past");
+                cell.style.opacity = "0.4";
+                cell.style.cursor = "not-allowed";
+            } else {
+                if (availableDates.includes(iso)) {
+                    cell.classList.add("available");
+                }
+                cell.addEventListener("click", () => toggleDate(iso));
             }
 
-            cell.addEventListener("click", () => toggleDate(iso));
             calendar.appendChild(cell);
         }
-    }
-
-    // Toggle date select/unselect
-    function toggleDate(isoDate) {
-        if (availableDates.includes(isoDate)) {
-            availableDates = availableDates.filter(x => x !== isoDate);
-        } else {
-            availableDates.push(isoDate);
-        }
-
-        availableDates.sort((a,b) => new Date(a) - new Date(b));
-
-        renderCalendar();
-        renderTable();
-        updateStats();
     }
 
     // Update "Upcoming Available Dates" table
     function renderTable() {
         dateBody.innerHTML = "";
 
-        if (availableDates.length === 0) {
+        // Filter to future dates only
+        const today = new Date().toISOString().split('T')[0];
+        const futureDates = availableDates.filter(d => d >= today);
+
+        if (futureDates.length === 0) {
             const row = document.createElement("tr");
-            row.innerHTML = `<td colspan="2">No available dates</td>`;
+            row.innerHTML = `<td colspan="2" style="text-align: center; color: #888; padding: 20px;">No available dates set. Click on dates in the calendar to add them.</td>`;
             dateBody.appendChild(row);
             return;
         }
 
-        availableDates.forEach(date => {
+        futureDates.forEach(date => {
             const row = document.createElement("tr");
 
             row.innerHTML = `
                 <td>${niceLabel(date)}</td>
                 <td>
                     <button class="action-btn remove-btn" data-date="${date}">
-                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-solid fa-trash"></i> Remove
                     </button>
                 </td>
             `;
@@ -119,12 +179,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Remove handler
         document.querySelectorAll(".remove-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
+            btn.addEventListener("click", async () => {
                 const iso = btn.getAttribute("data-date");
-                availableDates = availableDates.filter(d => d !== iso);
-                renderCalendar();
-                renderTable();
-                updateStats();
+                await toggleDate(iso);
             });
         });
     }
@@ -134,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const now = new Date();
         const thisMonth = now.getMonth();
         const thisYear = now.getFullYear();
+        const today = now.toISOString().split('T')[0];
 
         let nextMonth = thisMonth + 1;
         let nextYear = thisYear;
@@ -145,6 +203,9 @@ document.addEventListener("DOMContentLoaded", () => {
         let total = 0, tm = 0, nm = 0;
 
         availableDates.forEach(iso => {
+            // Only count future dates
+            if (iso < today) return;
+            
             const d = new Date(iso + "T00:00:00");
             total++;
             if (d.getFullYear() === thisYear && d.getMonth() === thisMonth) tm++;
@@ -167,8 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
         renderCalendar();
     });
 
-    // Init
-    renderCalendar();
-    renderTable();
-    updateStats();
+    // Init - Load from server
+    loadAvailability();
 });

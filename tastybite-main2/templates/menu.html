@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/menu.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu.css') }}">
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
 </head>
 
@@ -12,16 +12,16 @@
     <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
     <hr id="line1">
 
-    <a href="caterer_dashboard.html"><button id="b1"><i class="fa-solid fa-table-cells-large"></i> Overview</button></a>
+    <a href="{{ url_for('caterer_dashboard') }}"><button id="b1"><i class="fa-solid fa-table-cells-large"></i> Overview</button></a>
 
     <div class="menu">
-        <a href="menu.html"><button id="b"><i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a>
+        <a href="{{ url_for('manage_menu') }}"><button id="b"><i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a>
     </div>
 
-    <a href="availability.html"><button id="b1"><i class="fa-regular fa-calendar-days"></i> Availability</button></a>
-    <a href="cbooking.html"><button id="b1"><i class="fa-solid fa-bread-slice"></i> Bookings</button></a>
-    <a href="cmy_profile.html"><button id="b1"><i class="fa-regular fa-user"></i> My Profile</button></a>
-    <a href="login.html"><button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+    <a href="{{ url_for('availability') }}"><button id="b1"><i class="fa-regular fa-calendar-days"></i> Availability</button></a>
+    <a href="{{ url_for('caterer_bookings') }}"><button id="b1"><i class="fa-solid fa-bread-slice"></i> Bookings</button></a>
+    <a href="{{ url_for('caterer_profile') }}"><button id="b1"><i class="fa-regular fa-user"></i> My Profile</button></a>
+    <a href="{{ url_for('login') }}"><button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
 </div>
 
 <div class="cat_menu_container">
@@ -56,7 +56,7 @@
 </div>
 
 <!-- ---------- Modal ---------- -->
-<div class="modal" id="menuModal">
+<div class="modal" id="menuModal" style="display:none;">
     <div class="modal-content">
         <h3 id="modalTitle">Add Menu Item</h3>
 
@@ -83,6 +83,6 @@
     </div>
 </div>
 
-<script src="../static/menu.js"></script>
+<script src="{{ url_for('static', filename='menu.js') }}"></script>
 </body>
 </html>

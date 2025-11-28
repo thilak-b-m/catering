@@ -1,31 +1,432 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <link rel="stylesheet" href="../static/style.css">
+<head>
+    <title>Dashboard | TastyBite Caterer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
-    </head> 
-    <body>
+</head> 
+<body>
     <div class="catererdashboard">
         <i class="fa-solid fa-utensils"></i><h4>TastyBite</h4>
         <hr id="line1">
+
         <div class="overview">
-        <a href="caterer_dashboard.html"><button id="b"> <i class="fa-solid fa-table-cells-large"></i> Overview</button></a><br>
+            <a href="{{ url_for('caterer_dashboard') }}">
+                <button id="b">
+                    <i class="fa-solid fa-table-cells-large"></i> Overview
+                </button>
+            </a><br>
         </div>
-        <a href="menu.html"><button id="b1"> <i class="fa-regular fa-calendar-minus"></i> Manage Menu</button></a><br>
-        <a href="availability.html"><button id="b1"> <i class="fa-regular fa-calendar-days"></i> Availability</button><br></a>
-        <a href="cbooking.html"><button id="b1"> <i class="fa-solid fa-bread-slice"></i> Booking</button></a>
-        <a href="cmy_profile.html"><button id="b1"> <i class="fa-regular fa-user"></i> My Profile</button></a>
-        <a href="login.html"><button id="b1"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></a>
+
+        <a href="{{ url_for('manage_menu') }}">
+            <button id="b1"><i class="fa-regular fa-calendar-minus"></i> Manage Menu</button>
+        </a><br>
+
+        <a href="{{ url_for('availability') }}">
+            <button id="b1"><i class="fa-regular fa-calendar-days"></i> Availability</button>
+        </a><br>
+
+        <a href="{{ url_for('caterer_bookings') }}">
+            <button id="b1"><i class="fa-solid fa-bread-slice"></i> Booking</button>
+        </a><br>
+
+        <a href="{{ url_for('caterer_profile') }}">
+            <button id="b1"><i class="fa-regular fa-user"></i> My Profile</button>
+        </a><br>
+
+        <a href="{{ url_for('login') }}">
+            <button id="b1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+        </a>
     </div>
-    <!-- <div class="welcome">
-        <h2>Welcome !!</h2>
-        <p1>Find the perfect caterer for your special event</p1>
-        <div class="search">
-            <h4>Search Caterers</h4>
-            <p2>Filter by cuisine, caterer name or location</p2><br>
-            <input type="text" id="searchbox" name="searchbox" placeholder="Search by cuisine or caterer name ...">
-            <button onclick="search" id="search">Search</button>
+
+    <div class="dashboard-content">
+        <div class="dashboard-header">
+            <h1>Welcome back! 👋</h1>
+            <p id="catererGreeting">Loading...</p>
         </div>
-    </div> -->
-    </body>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon bookings">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalBookings">0</h3>
+                    <p>Total Bookings</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="pendingBookings">0</h3>
+                    <p>Pending Requests</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon accepted">
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="acceptedBookings">0</h3>
+                    <p>Accepted Bookings</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon menu">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="menuItems">0</h3>
+                    <p>Menu Items</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon dates">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="availableDates">0</h3>
+                    <p>Available Dates</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2><i class="fa-solid fa-bolt"></i> Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="{{ url_for('manage_menu') }}" class="action-card">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span>Add Menu Item</span>
+                </a>
+                <a href="{{ url_for('availability') }}" class="action-card">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <span>Set Availability</span>
+                </a>
+                <a href="{{ url_for('caterer_bookings') }}" class="action-card">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>View Bookings</span>
+                </a>
+                <a href="{{ url_for('caterer_profile') }}" class="action-card">
+                    <i class="fa-solid fa-user-pen"></i>
+                    <span>Edit Profile</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Bookings -->
+        <div class="recent-section">
+            <h2><i class="fa-solid fa-history"></i> Recent Booking Requests</h2>
+            <div id="recentBookings" class="recent-list">
+                <p class="loading">Loading recent bookings...</p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .dashboard-content {
+            margin-left: 22%;
+            padding: 30px;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .dashboard-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stat-icon i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .stat-icon.bookings {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .stat-icon.pending {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
+        .stat-icon.accepted {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+        
+        .stat-icon.menu {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+        
+        .stat-icon.dates {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+        
+        .stat-info h3 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            margin-bottom: 40px;
+        }
+        
+        .quick-actions h2 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .quick-actions h2 i {
+            color: rgb(217, 167, 3);
+            margin-right: 10px;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .action-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border-color: rgb(217, 167, 3);
+        }
+        
+        .action-card i {
+            font-size: 35px;
+            color: rgb(217, 167, 3);
+            margin-bottom: 12px;
+            display: block;
+        }
+        
+        .action-card span {
+            color: #333;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        /* Recent Section */
+        .recent-section h2 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .recent-section h2 i {
+            color: rgb(217, 167, 3);
+            margin-right: 10px;
+        }
+        
+        .recent-list {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .recent-item {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .recent-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recent-info {
+            flex: 1;
+        }
+        
+        .recent-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .recent-info p {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .recent-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .recent-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .recent-status.accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .recent-status.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .no-bookings {
+            padding: 40px;
+            text-align: center;
+            color: #888;
+        }
+        
+        .loading {
+            padding: 30px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+
+    <script>
+async function loadStats() {
+    try {
+        const response = await fetch('/api/caterer/stats');
+        const stats = await response.json();
+        
+        if (stats.error) {
+            console.error('Error loading stats:', stats.error);
+            return;
+        }
+        
+        document.getElementById('totalBookings').textContent = stats.total_bookings;
+        document.getElementById('pendingBookings').textContent = stats.pending_bookings;
+        document.getElementById('acceptedBookings').textContent = stats.accepted_bookings;
+        document.getElementById('menuItems').textContent = stats.menu_items;
+        document.getElementById('availableDates').textContent = stats.available_dates;
+        
+    } catch (error) {
+        console.error('Error loading stats:', error);
+    }
+}
+
+async function loadProfile() {
+    try {
+        const response = await fetch('/api/caterer/profile');
+        const profile = await response.json();
+        
+        if (profile.name) {
+            document.getElementById('catererGreeting').textContent = 
+                `Here's an overview of your catering business, ${profile.name}`;
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error);
+    }
+}
+
+async function loadRecentBookings() {
+    try {
+        const response = await fetch('/api/bookings');
+        const bookings = await response.json();
+        
+        const container = document.getElementById('recentBookings');
+        
+        if (bookings.length === 0) {
+            container.innerHTML = '<div class="no-bookings"><i class="fa-regular fa-calendar-xmark" style="font-size: 40px; display: block; margin-bottom: 15px; color: #ddd;"></i>No booking requests yet</div>';
+            return;
+        }
+        
+        // Show only latest 5 bookings
+        const recent = bookings.slice(0, 5);
+        
+        container.innerHTML = recent.map(booking => {
+            const date = new Date(booking.event_date + 'T00:00:00');
+            const formattedDate = date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            
+            return `
+                <div class="recent-item">
+                    <div class="recent-info">
+                        <h4>${booking.user_name}</h4>
+                        <p><i class="fa-regular fa-calendar"></i> ${formattedDate} &nbsp;&nbsp; <i class="fa-solid fa-users"></i> ${booking.guest_count} guests</p>
+                    </div>
+                    <span class="recent-status ${booking.status}">${booking.status}</span>
+                </div>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('Error loading bookings:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadStats();
+    loadProfile();
+    loadRecentBookings();
+});
+    </script>
+</body>
 </html>

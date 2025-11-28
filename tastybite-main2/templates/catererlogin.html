@@ -8,17 +8,17 @@
             <i class="fa-solid fa-utensils"></i><h4 id="tastybite">TastyBite</h4><br>
             <h4>Caterer Login</h4>
             <p1>Sign in to manage your catering services</p1><br><br>
-            <form action="/submit_caterer_login" method="post">
+            <form action="{{ url_for('submit_caterer_login') }}" method="post">
                 <label for="email" id="mail">Email:</label><br>
                 <input type="text" id="email" name="email" placeholder="your.email@example.com" required><br><br>
                 <label for="password" id="pass">Password:</label><br>
                 <input type="password" id="password" name="password" required><br><br>
                 <button id="signin">Sign In</button>
             </form><br>
-            <p2>Don't have an account?</p2><a href="create.html" id="create_acc"> Create an account</a><br>
+            <p2>Don't have an account?</p2><a href="{{ url_for('create_caterer') }}" id="create_acc"> Create an account</a><br>
             <p id="message"></p><br>
         </div>
     </div>
-    <script type="module" src="login.js"></script>
+    <script type="module" src="{{ url_for('static', filename='login.js') }}"></script>
     </body>
 </html>
