@@ -20,7 +20,7 @@
 }
 
 .add_new_btn {
-    background: #c68f00;
+    background: rgb(217, 167, 3);
     color: white;
     padding: 10px 18px;
     border: none;
@@ -30,7 +30,7 @@
 }
 
 .add_new_btn:hover {
-    background: #ae7f00;
+    background: #d9a703;
 }
 
 .menu_card {
@@ -141,7 +141,7 @@
     padding: 10px;
     border-radius: 6px;
     border: none;
-    background: #c68f00;
+    background: rgb(217, 167, 3);
     color: white;
     margin-top: 10px;
     cursor: pointer;

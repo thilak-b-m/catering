@@ -26,7 +26,7 @@
 
     <div class="cbook">
         <a href="{{ url_for('caterer_bookings') }}">
-            <button id="b"><i class="fa-solid fa-bread-slice"></i> Booking</button>
+            <button id="b"><i class="fa-solid fa-clipboard-list"></i> Booking</button>
         </a>
     </div>
 
@@ -322,7 +322,46 @@
     .contact-btn:hover {
         background: #e9ecef;
     }
-</style>
+    
+    .food-items-section {
+        margin-top: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .food-items-display {
+        background: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-left: 4px solid rgb(217, 167, 3);
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    .food-items-display strong {
+        color: rgb(217, 167, 3);
+        display: block;
+        margin-bottom: 8px;
+    }
+    
+    .food-items-display i {
+        margin-right: 5px;
+    }
+    
+    .food-items-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .food-item-badge {
+        background: white;
+        border: 1px solid rgb(217, 167, 3);
+        color: rgb(217, 167, 3);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }</style>
 
 <script>
 let allBookings = [];
@@ -406,6 +445,8 @@ function displayBookings(statusFilter) {
                     ` : ''}
                 </div>
                 
+                <div id="foodItems-${booking.booking_id}" class="food-items-section"></div>
+                
                 ${isPending ? `
                     <div class="booking-actions">
                         <button class="accept-btn" onclick="updateBookingStatus(${booking.booking_id}, 'accepted')">
@@ -428,6 +469,43 @@ function displayBookings(statusFilter) {
             </div>
         `;
     }).join('');
+    
+    // Load food items for each booking
+    filtered.forEach(booking => {
+        loadBookingFoodItems(booking.booking_id);
+    });
+}
+
+async function loadBookingFoodItems(bookingId) {
+    try {
+        const response = await fetch(`/api/booking_items/${bookingId}`);
+        if (!response.ok) return;
+        
+        const items = await response.json();
+        const container = document.getElementById(`foodItems-${bookingId}`);
+        
+        if (!container) return;
+        
+        if (!items || items.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+        
+        const itemsHtml = items.map(item => `
+            <span class="food-item-badge">${item.name}</span>
+        `).join('');
+        
+        container.innerHTML = `
+            <div class="food-items-display">
+                <strong><i class="fa-solid fa-utensils"></i> Food Items:</strong>
+                <div class="food-items-badges">
+                    ${itemsHtml}
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        console.error('Error loading food items:', error);
+    }
 }
 
 async function updateBookingStatus(bookingId, status) {

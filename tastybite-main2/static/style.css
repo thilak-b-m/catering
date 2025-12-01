@@ -1,19 +1,19 @@
 /* login page 1 */
 
 .loginpage .fa-utensils{
-    color:#9c1212;
+    color:#880e21;
     gap: 10px;
     font-size: 30px;
 }
 .loginpage h4{
-    color:#9c1212;
+    color:#880e21;
     display: inline;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-left: 5px;
     font-size: 30px; 
 }
 .loginpage #line1{
-    color:#9c1212;
+    color:#880e21;
     width: 100%;
 }
 .loginpage h1{
@@ -51,11 +51,11 @@
     
 }
 .loginpage .user .fa-regular{
-    color:#9c1212;
+    color:#880e21;
     font-size: 40px;
     margin-top: 25px;
     margin-bottom: 20px;
-    border: 2px solid #b04343;
+    border: 2px solid #c4a5a5;
     width: 50px;
     height: 50px;
     margin: auto;
@@ -97,11 +97,11 @@
     
 }
 .loginpage .caterer .fa-bread-slice{
-    color:#880e21;
+    color:rgb(217, 167, 3);
     font-size: 40px;
     margin-top: 25px;
     margin-bottom: 20px;
-    border: 2px solid #b04343;
+    border: 2px solid #e6c971;
     width: 50px;
     height: 50px;
     margin: auto;
@@ -148,7 +148,7 @@
 .loginpage .menu .fa-utensils{
     color:#880e21;
     font-size: 35px;
-    border: 2px solid #b04343;
+    border: 2px solid #c4a5a5;
     width: 30px;
     height: 30px;
     padding: 15px;
@@ -158,7 +158,7 @@
 .loginpage .menu .fa-address-book{
     color:#880e21;
     font-size: 35px;
-    border: 2px solid #b04343;
+    border: 2px solid #c4a5a5;
     width: 30px;
     height: 30px;
     padding: 15px;
@@ -166,9 +166,9 @@
 }
 
 .loginpage .menu .fa-bread-slice{
-    color:#880e21;
+    color:rgb(217, 167, 3);
     font-size: 35px;
-    border: 2px solid #b04343;
+    border: 2px solid #e6c971;
     width: 30px;
     height: 30px;
     padding: 15px;
@@ -749,7 +749,7 @@
 
 /* View button */
 .view-btn {
-    background-color: #ff6b35;
+    background-color: #880e21;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -761,7 +761,7 @@
 }
 
 .view-btn:hover {
-    background-color: #e85c2b;
+    background-color: #6d0b1a;
 }
 
 
@@ -942,7 +942,7 @@
     margin-left: 5px;
     border: none;
 }
-.catererdashboard .fa-calendar-minus, .catererdashboard .fa-user, .catererdashboard .fa-bread-slice, .catererdashboard .fa-arrow-right-from-bracket, .catererdashboard .fa-calendar-days{
+.catererdashboard .fa-calendar-minus, .catererdashboard .fa-user, .catererdashboard .fa-clipboard-list, .catererdashboard .fa-arrow-right-from-bracket, .catererdashboard .fa-calendar-days{
     font-size: 18px;
     color: rgb(0, 0, 0);
     float: left;
@@ -1056,9 +1056,9 @@
 
 /* caterer booking */
 
-.cbook .fa-bread-slice{
+.cbook .fa-clipboard-list{
     font-size: 18px;
-    color: #000000;
+    color: #ffffff;
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -1093,7 +1093,7 @@
 
 .cprof .fa-user{
     font-size: 18px;
-    color: #000000;
+    color: #ffffff;
     float: left;
     margin-left: 10px;
     margin-top: auto;
@@ -1113,7 +1113,7 @@
     border-radius: 7px;
     text-align: left;
 }
-.userdashboard .fa-bread-slice{
+.userdashboard .fa-clipboard-list{
     font-size: 18px;
     color: #000000;
     float: left;

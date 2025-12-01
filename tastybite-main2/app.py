@@ -2,11 +2,15 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 import sqlite3
 import uuid
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 app.secret_key = "supersecret"     # Needed for session
 
-DB_PATH = "data2.db"
+# ⚠️ DATABASE LOCATION: ALWAYS in this directory (tastybite-main2)
+# DO NOT create duplicate database files in other locations
+# This ensures all data is in ONE place and prevents data loss
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data2.db")
 
 
 # --------------------------------------------------------
@@ -28,11 +32,18 @@ def create_tables():
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
             firebase_uid TEXT UNIQUE,
             name TEXT NOT NULL,
-            email TEXT,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
             phone TEXT NOT NULL,
             address TEXT NOT NULL
         )
     """)
+    
+    # Add password column if it doesn't exist
+    try:
+        cur.execute("ALTER TABLE user_details ADD COLUMN password TEXT NOT NULL DEFAULT ''")
+    except:
+        pass
     
     # Caterer table
     cur.execute("""
@@ -40,7 +51,8 @@ def create_tables():
             caterer_id INTEGER PRIMARY KEY AUTOINCREMENT,
             firebase_uid TEXT UNIQUE,
             name TEXT NOT NULL,
-            email TEXT,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
             phone TEXT NOT NULL,
             address TEXT NOT NULL,
             fssai TEXT NOT NULL,
@@ -48,6 +60,12 @@ def create_tables():
             cuisine_type TEXT DEFAULT 'Multi-cuisine'
         )
     """)
+    
+    # Add password column if it doesn't exist
+    try:
+        cur.execute("ALTER TABLE caterer_details ADD COLUMN password TEXT NOT NULL DEFAULT ''")
+    except:
+        pass
 
     # Menu items table
     cur.execute("""
@@ -91,6 +109,18 @@ def create_tables():
         )
     """)
 
+    # Booking items table (food items selected for a booking)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS booking_items(
+            booking_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            booking_id INTEGER NOT NULL,
+            menu_item_id INTEGER NOT NULL,
+            quantity INTEGER DEFAULT 1,
+            FOREIGN KEY (booking_id) REFERENCES booking(booking_id),
+            FOREIGN KEY (menu_item_id) REFERENCES menu_items(id)
+        )
+    """)
+
     conn.commit()
     conn.close()
 
@@ -113,54 +143,91 @@ def userlogin():
     return render_template("userlogin.html")
 
 
-@app.route("/create")
-def create():
-    return render_template("create.html")
-
-
-@app.route("/create_caterer")
-def create_caterer():
-    return render_template("cat_create.html")
-
-
 @app.route("/submit_user_login", methods=["POST"])
 def submit_user_login():
-    firebase_uid = request.form.get("firebase_uid", "")
+    firebase_uid = request.form.get("firebase_uid", str(uuid.uuid4()))
+    name = request.form.get("name", "")
+    email = request.form.get("email", "")
+    password = request.form.get("password", "")
+    phone = request.form.get("phone", "")
+    address = request.form.get("address", "")
+    is_signup = request.form.get("is_signup", "false") == "true"
+    
     session["firebase_uid"] = firebase_uid
     session["user_type"] = "user"
+    session["user_email"] = email
     
-    # Check if user profile exists
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM user_details WHERE firebase_uid=?", (firebase_uid,))
-    user = cur.fetchone()
-    conn.close()
     
-    if user:
-        session["user_id"] = user["user_id"]
+    try:
+        if is_signup:
+            # Registration flow
+            cur.execute("""
+                INSERT INTO user_details (firebase_uid, name, email, password, phone, address)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (firebase_uid, name, email, password, phone, address))
+            session["user_id"] = cur.lastrowid
+        else:
+            # Login flow
+            cur.execute("SELECT * FROM user_details WHERE email=? AND password=?", (email, password))
+            user = cur.fetchone()
+            if not user:
+                conn.close()
+                return redirect(url_for("userlogin") + "?error=invalid_credentials")
+            session["user_id"] = user["user_id"]
+            session["firebase_uid"] = user["firebase_uid"]
+        
+        conn.commit()
+        conn.close()
         return redirect(url_for("user_dashboard"))
-    else:
-        return redirect(url_for("user_detail"))
+    except sqlite3.IntegrityError as e:
+        conn.close()
+        return redirect(url_for("userlogin") + "?error=email_exists")
 
 
 @app.route("/submit_caterer_login", methods=["POST"])
 def submit_caterer_login():
-    firebase_uid = request.form.get("firebase_uid", "")
+    firebase_uid = request.form.get("firebase_uid", str(uuid.uuid4()))
+    name = request.form.get("name", "")
+    email = request.form.get("email", "")
+    password = request.form.get("password", "")
+    phone = request.form.get("phone", "")
+    address = request.form.get("address", "")
+    fssai = request.form.get("fssai", "")
+    is_signup = request.form.get("is_signup", "false") == "true"
+    
     session["firebase_uid"] = firebase_uid
     session["user_type"] = "caterer"
+    session["caterer_email"] = email
     
-    # Check if caterer profile exists
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM caterer_details WHERE firebase_uid=?", (firebase_uid,))
-    caterer = cur.fetchone()
-    conn.close()
     
-    if caterer:
-        session["caterer_id"] = caterer["caterer_id"]
+    try:
+        if is_signup:
+            # Registration flow
+            cur.execute("""
+                INSERT INTO caterer_details (firebase_uid, name, email, password, phone, address, fssai)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (firebase_uid, name, email, password, phone, address, fssai))
+            session["caterer_id"] = cur.lastrowid
+        else:
+            # Login flow
+            cur.execute("SELECT * FROM caterer_details WHERE email=? AND password=?", (email, password))
+            caterer = cur.fetchone()
+            if not caterer:
+                conn.close()
+                return redirect(url_for("catererlogin") + "?error=invalid_credentials")
+            session["caterer_id"] = caterer["caterer_id"]
+            session["firebase_uid"] = caterer["firebase_uid"]
+        
+        conn.commit()
+        conn.close()
         return redirect(url_for("caterer_dashboard"))
-    else:
-        return redirect(url_for("caterer_detail"))
+    except sqlite3.IntegrityError as e:
+        conn.close()
+        return redirect(url_for("catererlogin") + "?error=email_exists")
 
 
 @app.route("/user_dashboard")
@@ -171,16 +238,6 @@ def user_dashboard():
 @app.route("/caterer_dashboard")
 def caterer_dashboard():
     return render_template("caterer_dashboard.html")
-
-
-@app.route("/user_detail")
-def user_detail():
-    return render_template("user_detail.html")
-
-
-@app.route("/caterer_detail")
-def caterer_detail():
-    return render_template("caterer_detail.html")
 
 
 @app.route("/my_booking")
@@ -216,82 +273,6 @@ def view_caterer(caterer_id):
 # --------------------------------------------------------
 # SUBMIT USER DETAILS
 # --------------------------------------------------------
-@app.route("/submit_user_detail", methods=["POST"])
-def submit_user_detail():
-    firebase_uid = session.get("firebase_uid", str(uuid.uuid4()))
-    name = request.form["name"]
-    phone = request.form["phone"]
-    address = request.form["address"]
-    email = request.form.get("email", "")
-
-    conn = get_db()
-    cur = conn.cursor()
-    
-    # Check if user already exists
-    cur.execute("SELECT user_id FROM user_details WHERE firebase_uid=?", (firebase_uid,))
-    existing = cur.fetchone()
-    
-    if existing:
-        cur.execute("""
-            UPDATE user_details SET name=?, phone=?, address=?, email=?
-            WHERE firebase_uid=?
-        """, (name, phone, address, email, firebase_uid))
-        session["user_id"] = existing["user_id"]
-    else:
-        cur.execute("""
-            INSERT INTO user_details (firebase_uid, name, phone, address, email)
-            VALUES (?, ?, ?, ?, ?)
-        """, (firebase_uid, name, phone, address, email))
-        session["user_id"] = cur.lastrowid
-    
-    conn.commit()
-    conn.close()
-
-    return redirect(url_for("user_dashboard"))
-
-
-# --------------------------------------------------------
-# SUBMIT CATERER DETAILS
-# --------------------------------------------------------
-@app.route("/submit_caterer_detail", methods=["POST"])
-def submit_caterer_detail():
-    firebase_uid = session.get("firebase_uid", str(uuid.uuid4()))
-
-    name = request.form["name"]
-    phone = request.form["phone"]
-    address = request.form["address"]
-    fssai = request.form["fssai"]
-    email = request.form.get("email", "")
-    description = request.form.get("description", "")
-    cuisine_type = request.form.get("cuisine_type", "Multi-cuisine")
-
-    conn = get_db()
-    cur = conn.cursor()
-
-    # Check if caterer already exists
-    cur.execute("SELECT caterer_id FROM caterer_details WHERE firebase_uid=?", (firebase_uid,))
-    existing = cur.fetchone()
-    
-    if existing:
-        cur.execute("""
-            UPDATE caterer_details 
-            SET name=?, phone=?, address=?, fssai=?, email=?, description=?, cuisine_type=?
-            WHERE firebase_uid=?
-        """, (name, phone, address, fssai, email, description, cuisine_type, firebase_uid))
-        session["caterer_id"] = existing["caterer_id"]
-    else:
-        cur.execute("""
-            INSERT INTO caterer_details (firebase_uid, name, phone, address, fssai, email, description, cuisine_type)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (firebase_uid, name, phone, address, fssai, email, description, cuisine_type))
-        session["caterer_id"] = cur.lastrowid
-
-    conn.commit()
-    conn.close()
-
-    return redirect(url_for("caterer_dashboard"))
-
-
 # --------------------------------------------------------
 # CATERERS API
 # --------------------------------------------------------
@@ -588,6 +569,16 @@ def api_create_booking():
     
     conn.commit()
     booking_id = cur.lastrowid
+    
+    # Add food items to booking if provided
+    food_items = data.get("food_items", [])
+    for item in food_items:
+        cur.execute("""
+            INSERT INTO booking_items (booking_id, menu_item_id, quantity)
+            VALUES (?, ?, 1)
+        """, (booking_id, item["menu_item_id"]))
+    
+    conn.commit()
     conn.close()
     
     return jsonify({"message": "Booking created", "booking_id": booking_id})
@@ -618,6 +609,24 @@ def api_delete_booking(booking_id):
     conn.close()
     
     return jsonify({"message": "Booking deleted"})
+
+
+@app.route("/api/booking_items/<int:booking_id>", methods=["GET"])
+def api_get_booking_items(booking_id):
+    conn = get_db()
+    cur = conn.cursor()
+    
+    cur.execute("""
+        SELECT bi.booking_item_id, bi.menu_item_id, bi.quantity, m.name, m.price, m.category
+        FROM booking_items bi
+        JOIN menu_items m ON bi.menu_item_id = m.id
+        WHERE bi.booking_id = ?
+    """, (booking_id,))
+    
+    rows = cur.fetchall()
+    conn.close()
+    
+    return jsonify([dict(r) for r in rows])
 
 
 # --------------------------------------------------------

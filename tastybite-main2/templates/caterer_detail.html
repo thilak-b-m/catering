@@ -13,7 +13,7 @@
 
             <form id="catererDetailForm" action="{{ url_for('submit_caterer_detail') }}" method="post">
                 <input type="hidden" id="firebase_uid" name="firebase_uid" value="">
-                <input type="hidden" id="email" name="email" value="">
+                <input type="email" id="email" name="email" placeholder="Your Email" required><br>
                 <input type="text" id="name" name="name" placeholder="Caterer Name" required><br>
                 <input type="text" id="phone" name="phone" placeholder="Contact Number" required><br>
                 <input type="text" id="address" name="address" placeholder="Business Address" required><br>

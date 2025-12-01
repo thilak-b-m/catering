@@ -60,6 +60,15 @@
         <!-- Booking Form -->
         <div class="detail-card booking-card">
             <h3><i class="fa-solid fa-calendar-plus"></i> Book This Caterer</h3>
+            
+            <!-- Food Items Selection -->
+            <div class="food-selection">
+                <h4>Select Food Items</h4>
+                <div id="foodItemsContainer" class="selected-items-list">
+                    <p style="color: #999; font-size: 14px;">Select items from the menu above</p>
+                </div>
+            </div>
+            
             <form id="bookingForm">
                 <div class="form-group">
                     <label for="eventDate">Event Date *</label>
@@ -157,8 +166,10 @@ function displayMenu(filter) {
         return;
     }
 
-    container.innerHTML = filtered.map(item => `
-        <div class="menu-item ${item.type === 'Veg' ? 'veg' : 'nonveg'}">
+    container.innerHTML = filtered.map(item => {
+        const isSelected = selectedFoodItems[item.id] ? 'selected' : '';
+        return `
+        <div class="menu-item ${item.type === 'Veg' ? 'veg' : 'nonveg'} ${isSelected}" onclick="toggleFoodItem(${item.id}, '${item.name}', ${item.price})">
             <div class="menu-item-header">
                 <span class="menu-name">${item.name}</span>
                 <span class="menu-badge ${item.type === 'Veg' ? 'badge-veg' : 'badge-nonveg'}">${item.type}</span>
@@ -168,7 +179,8 @@ function displayMenu(filter) {
                 <span class="menu-price">₹${item.price}/plate</span>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 // Menu filter buttons
@@ -240,10 +252,56 @@ function populateDateDropdown() {
 }
 
 // Handle booking form
+let selectedFoodItems = {};
+
+function toggleFoodItem(itemId, itemName, itemPrice) {
+    if (selectedFoodItems[itemId]) {
+        delete selectedFoodItems[itemId];
+    } else {
+        selectedFoodItems[itemId] = {
+            menu_item_id: itemId,
+            name: itemName
+        };
+    }
+    updateFoodSelectionDisplay();
+}
+
+function updateFoodSelectionDisplay() {
+    const container = document.getElementById('foodItemsContainer');
+    const items = Object.values(selectedFoodItems);
+    
+    if (items.length === 0) {
+        container.innerHTML = '<p style="color: #999; font-size: 14px;">Select items from the menu above</p>';
+        return;
+    }
+    
+    container.innerHTML = items.map(item => `
+        <div class="food-item-chip">
+            <span>${item.name}</span>
+            <button type="button" class="remove-chip" onclick="removeFoodItem(${item.menu_item_id})">×</button>
+        </div>
+    `).join('');
+}
+
+function removeFoodItem(itemId) {
+    delete selectedFoodItems[itemId];
+    updateFoodSelectionDisplay();
+    // Update menu display to show deselection
+    const currentFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    displayMenu(currentFilter);
+}
+
 document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const messageEl = document.getElementById('bookingMessage');
+    
+    // Check if at least one food item is selected
+    if (Object.keys(selectedFoodItems).length === 0) {
+        messageEl.textContent = '❌ Please select at least one food item';
+        messageEl.className = 'booking-message error';
+        return;
+    }
     
     const bookingData = {
         caterer_id: catererId,
@@ -251,7 +309,10 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
         event_time: document.getElementById('eventTime').value,
         location: document.getElementById('location').value,
         guest_count: parseInt(document.getElementById('guestCount').value),
-        special_requests: document.getElementById('specialRequests').value
+        special_requests: document.getElementById('specialRequests').value,
+        food_items: Object.values(selectedFoodItems).map(item => ({
+            menu_item_id: item.menu_item_id
+        }))
     };
 
     if (!bookingData.event_date) {
@@ -273,6 +334,8 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             messageEl.textContent = '✅ Booking request sent successfully! The caterer will review your request.';
             messageEl.className = 'booking-message success';
             document.getElementById('bookingForm').reset();
+            selectedFoodItems = {};
+            updateFoodSelectionDisplay();
             
             setTimeout(() => {
                 window.location.href = '/my_booking';

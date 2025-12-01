@@ -102,10 +102,24 @@
     border-radius: 10px;
     background: #fafafa;
     border-left: 4px solid #26a541;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
 }
 
 .menu-item.nonveg {
     border-left-color: #e53935;
+}
+
+.menu-item.selected {
+    background: #fff3f3;
+    border: 2px solid #880e21;
+    border-left: 4px solid #880e21;
+    box-shadow: 0 2px 8px rgba(136, 14, 33, 0.2);
 }
 
 .menu-item-header {
@@ -290,6 +304,63 @@
     color: white;
 }
 
+/* Food Selection Styles */
+.food-selection {
+    background: #fafafa;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.food-selection h4 {
+    color: #333;
+    margin: 0 0 15px 0;
+    font-size: 18px;
+}
+
+.selected-items-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 40px;
+    align-items: center;
+}
+
+.food-item-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff3f3;
+    border: 1px solid #880e21;
+    color: #880e21;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.remove-chip {
+    background: transparent;
+    border: none;
+    color: #880e21;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.remove-chip:hover {
+    background: #880e21;
+    color: white;
+    border-radius: 50%;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .detail-container {
@@ -310,6 +381,17 @@
     
     .caterer-info p {
         justify-content: center;
+    }
+    
+    .food-item-card {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .food-item-price,
+    .food-item-qty,
+    .remove-btn {
+        display: none;
     }
 }
 

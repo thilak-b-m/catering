@@ -1,24 +1,293 @@
 <!DOCTYPE html>
 <html>
+<head>
     <script src="https://kit.fontawesome.com/fff37026a8.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../static/style.css">
-    <body>
+    <style>
+        .clogin {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            margin-top: 0;
+        }
+        
+        .auth-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 95%;
+            padding: 30px;
+            border: 2px solid #880e21;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-header i {
+            font-size: 30px;
+            color: rgb(217, 167, 3);
+            margin-right: 5px;
+        }
+        
+        .auth-header h2 {
+            margin: 5px 0;
+            color: rgb(217, 167, 3);
+            font-size: 28px;
+            font-weight: bold;
+            display: inline;
+        }
+        
+        .auth-header p {
+            color: #4e4848;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 15px;
+            color: #999;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            font-weight: 500;
+        }
+        
+        .tab-button.active {
+            color: rgb(217, 167, 3);
+            border-bottom-color: rgb(217, 167, 3);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #793030;
+            font-weight: 500;
+            font-size: 12px;
+            text-align: left;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: rgb(217, 167, 3);
+        }
+        
+        .form-content {
+            display: none;
+        }
+        
+        .form-content.active {
+            display: block;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: rgb(217, 167, 3);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #d9a703;
+        }
+        
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        
+        .message.error {
+            background: #fee;
+            color: #c33;
+            display: block;
+        }
+        
+        .message.success {
+            background: #efe;
+            color: #3c3;
+            display: block;
+        }
+    </style>
+</head>
+<body>
     <div class="clogin">
-        <div class="userlogin">
-            <i class="fa-solid fa-utensils"></i><h4 id="tastybite">TastyBite</h4><br>
-            <h4>Caterer Login</h4>
-            <p1>Sign in to manage your catering services</p1><br><br>
-            <form action="{{ url_for('submit_caterer_login') }}" method="post">
-                <label for="email" id="mail">Email:</label><br>
-                <input type="text" id="email" name="email" placeholder="your.email@example.com" required><br><br>
-                <label for="password" id="pass">Password:</label><br>
-                <input type="password" id="password" name="password" required><br><br>
-                <button id="signin">Sign In</button>
-            </form><br>
-            <p2>Don't have an account?</p2><a href="{{ url_for('create_caterer') }}" id="create_acc"> Create an account</a><br>
-            <p id="message"></p><br>
+        <div class="auth-container">
+            <div class="auth-header">
+                <i class="fa-solid fa-utensils"></i>
+                <h2>TastyBite</h2>
+                <p>Manage Your Catering Services</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="tab-button active" onclick="switchTab('login')">Sign In</button>
+                <button class="tab-button" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="login" class="form-content active">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email:</label>
+                        <input type="email" id="login-email" name="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password:</label>
+                        <input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Sign In</button>
+                </form>
+            </div>
+            
+            <!-- Signup Form -->
+            <div id="signup" class="form-content">
+                <form id="signupForm" onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label for="signup-name">Business Name:</label>
+                        <input type="text" id="signup-name" name="name" placeholder="Your business name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email:</label>
+                        <input type="email" id="signup-email" name="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-phone">Phone:</label>
+                        <input type="tel" id="signup-phone" name="phone" placeholder="Your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-address">Address:</label>
+                        <input type="text" id="signup-address" name="address" placeholder="Business address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-fssai">FSSAI Permit ID:</label>
+                        <input type="text" id="signup-fssai" name="fssai" placeholder="Your FSSAI permit ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password:</label>
+                        <input type="password" id="signup-password" name="password" placeholder="At least 6 characters" required minlength="6">
+                    </div>
+                    <button type="submit" class="submit-btn">Create Account</button>
+                </form>
+            </div>
+            
+            <div id="message" class="message"></div>
         </div>
     </div>
-    <script type="module" src="{{ url_for('static', filename='login.js') }}"></script>
-    </body>
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.form-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function showMessage(msg, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = msg;
+            messageEl.className = `message ${type}`;
+        }
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/submit_caterer_login';
+            
+            form.appendChild(createInput('email', email));
+            form.appendChild(createInput('password', password));
+            form.appendChild(createInput('is_signup', 'false'));
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+        
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const phone = document.getElementById('signup-phone').value;
+            const address = document.getElementById('signup-address').value;
+            const fssai = document.getElementById('signup-fssai').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if (password.length < 6) {
+                showMessage('❌ Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/submit_caterer_login';
+            
+            form.appendChild(createInput('name', name));
+            form.appendChild(createInput('email', email));
+            form.appendChild(createInput('phone', phone));
+            form.appendChild(createInput('address', address));
+            form.appendChild(createInput('fssai', fssai));
+            form.appendChild(createInput('password', password));
+            form.appendChild(createInput('is_signup', 'true'));
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+        
+        function createInput(name, value) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            return input;
+        }
+        
+        // Check for error parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === 'invalid_credentials') {
+            showMessage('❌ Invalid email or password', 'error');
+        } else if (urlParams.get('error') === 'email_exists') {
+            showMessage('⚠️ Email already registered', 'error');
+        }
+    </script>
+</body>
 </html>
